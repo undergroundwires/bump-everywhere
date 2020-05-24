@@ -1,0 +1,47 @@
+{
+    "name": "bump-everywhere",
+    "version": "1.0.0",
+    "description": "Automate versioning, changelog creations and GitHub releases using bash, GitHub action, npm or docker.",
+    "main": "./scripts/bump-everywhere.sh",
+    "bin": {
+        "bump-everywhere": "./scripts/bump-everywhere.sh"
+    },
+    "scripts": {
+        "lint": "npm run lint:yaml && npm run lint:md && npm run lint:md:relative-urls && npm run lint:md:consistency",
+        "lint:vue": "vue-cli-service lint --no-fix",
+        "lint:yaml": "yamllint **/*.yaml --ignore=node_modules/**/*.yaml",
+        "lint:md": "markdownlint **/*.md --ignore node_modules",
+        "lint:md:relative-urls": "remark . --frail --use remark-validate-links",
+        "lint:md:consistency": "remark . --frail --use remark-preset-lint-consistent"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/undergroundwires/bump-everywhere"
+    },
+    "keywords": [
+        "GitHub",
+        "Bump",
+        "Bash",
+        "Shell",
+        "Semver",
+        "CHANGELOG",
+        "npm",
+        "release",
+        "git",
+        "readme"
+    ],
+    "author": "Erkin Ekici <npm@erkinekici.com> (https://github.com/undergroundwires)",
+    "license": "Apache-2.0",
+    "bugs": {
+        "url": "https://github.com/undergroundwires/bump-everywhere/issues"
+    },
+    "homepage": "https://github.com/undergroundwires/bump-everywhere",
+    "devDependencies": {
+        "markdownlint-cli": "^0.23.1",
+        "remark-cli": "^8.0.0",
+        "remark-lint-no-dead-urls": "^1.0.2",
+        "remark-preset-lint-consistent": "^3.0.0",
+        "remark-validate-links": "^10.0.0",
+        "yaml-lint": "^1.2.4"
+    }
+}

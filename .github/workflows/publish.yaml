@@ -1,0 +1,37 @@
+name: Publish
+
+on:
+ release:
+   types: [created] # will be triggered when a NON-draft release is created and published.
+
+jobs:
+  publish-npm:
+    name: Publish to npm registry
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+          registry-url: https://registry.npmjs.org/
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  publish-docker:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+          registry-url: https://registry.npmjs.org/
+      - name: Push to Docker Hub
+        uses: docker/build-push-action@v1
+        with:
+          username: undergroundwires
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: undergroundwires/bump-everywhere
+          tag_with_ref: true
+          tags: latest
