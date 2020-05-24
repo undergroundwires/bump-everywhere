@@ -1,0 +1,28 @@
+name: Bump version and release
+description: Bump git tag to the next version, generate a changelog file, and create a release with auto-generated release notes
+inputs:
+  user:
+    description: Name of the user who'll commit the changelog
+    required: false
+    default: ${{ github.actor }}
+  repository:
+    description: Repository name with owner to bump & release. For example, undergroundwires/bump-everywhere
+    required: false
+    default: ${{ github.repository }}
+  git-token:
+    description: Personal access token (PAT) used to clone & push to the repository.
+    required: false
+    default: ${{ github.token }}
+  release-token:
+    description: Personal access token (PAT) used to release to GitHub.
+    required: false
+    default: ${{ github.token }}
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.repository }}
+    - ${{ inputs.user }}
+    - ${{ inputs.git-token }}
+    - ${{ inputs.release-token }}
+  
