@@ -32,7 +32,16 @@ escape_regex() {
   echo "$text" | sed -e 's/[\/&]/\\&/g'
 }
 
+validate_ref() {
+  local ref="$1"
+  if ! git merge-base --is-ancestor "$ref" HEAD; then
+      echo "Reference does not exist in the current branch: $1"
+      exit 1
+  fi
+}
+
 main() {
+  validate_ref "${PREVIOUS}" && validate_ref "${CURRENT}"
   local -r commit_line_start="* "
   local line_start_pattern
   if ! line_start_pattern=$(escape_regex "$commit_line_start"); then

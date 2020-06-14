@@ -61,8 +61,9 @@ print_tags_except_first() {
             --repository "$REPOSITORY" \
             --current "$current_tag" \
             --previous "$next_tag"); then
-          echo "$LOG_COMMITS_SCRIPT_PATH has failed"
-          exit 1;
+          echo "$LOG_COMMITS_SCRIPT_PATH has failed:"
+          echo "$changes"
+          exit 1
         fi
         if [[ $changes ]]; then
           printf "%s\n\n" "$changes"
