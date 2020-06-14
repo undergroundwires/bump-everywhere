@@ -33,12 +33,13 @@ if is_empty_or_null "$ACCESS_TOKEN"; then echo "Access token is not set."; exit 
 
 release_exists() {
     local -r version="$1"
-    local -r api_url="https://api.github.com/repos/$REPOSITORY/releases/tags/$version?access_token=$ACCESS_TOKEN"
+    local -r api_url="https://api.github.com/repos/$REPOSITORY/releases/tags/$version"
     local -i status_code;
     if ! status_code=$(curl \
         --write-out '%{http_code}' \
         --silent \
         --output /dev/null \
+        --header "Authorization: token $ACCESS_TOKEN" \
         "$api_url"); then
         echo "Request to check if release exists has failed"
         exit 1;
@@ -110,7 +111,8 @@ create_release() {
         echo "jq has failed"
         exit 1;
     fi
-    curl "https://api.github.com/repos/$REPOSITORY/releases?access_token=$ACCESS_TOKEN" \
+    curl --header "Authorization: token $ACCESS_TOKEN" \
+        "https://api.github.com/repos/$REPOSITORY/releases" \
         --data "$json_payload" \
         --silent \
         --fail
