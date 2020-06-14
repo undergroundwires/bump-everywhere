@@ -40,7 +40,7 @@ main() {
     exit 1
   fi
   local -r version_pattern="[0-9]\+.[0-9]\+\.[0-9]\+" # + must be escaped to get special meaning e.g. \+
-  git log "${CURRENT}"..."${PREVIOUS}" \
+  git log "${PREVIOUS}".."${CURRENT}" \
       --pretty=format:"$commit_line_start%s | [commit](https://github.com/$REPOSITORY/commit/%H)" \
       --reverse \
           | grep -v Merge \

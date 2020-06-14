@@ -46,31 +46,31 @@ print_all_versions_from_latest() {
 }
 
 print_tags_except_first() {
-  local previous_tag=0;
   local tags
   if ! tags=$(print_all_versions_from_latest); then
     echo "Could not list & sort tags"
     exit 1;
   fi
-  for current_tag in $tags
+  local current_tag=0;
+  for next_tag in $tags
   do
-    if [ "$previous_tag" != 0 ]; then
-        print_title "$previous_tag"
+    if [ "$current_tag" != 0 ]; then
+        print_title "$current_tag"
         local changes
         if ! changes=$(bash "$LOG_COMMITS_SCRIPT_PATH" \
             --repository "$REPOSITORY" \
             --current "$current_tag" \
-            --previous "$previous_tag"); then
+            --previous "$next_tag"); then
           echo "$LOG_COMMITS_SCRIPT_PATH has failed"
           exit 1;
         fi
         if [[ $changes ]]; then
           printf "%s\n\n" "$changes"
         fi
-        printf "[compare](https://github.com/%s/compare/%s...%s)" "$REPOSITORY" "$current_tag" "$previous_tag"
+        printf "[compare](https://github.com/%s/compare/%s...%s)" "$REPOSITORY" "$next_tag" "$current_tag"
         printf "\n"
     fi
-    previous_tag=${current_tag}
+    current_tag=${next_tag}
   done
 }
 
