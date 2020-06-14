@@ -2,7 +2,7 @@
 
 has_value() {
     local -r text="$1"
-    [[ ! -z "$text" ]]
+    [[ -n "$text" ]]
 }
 
 is_empty_or_null()  {
