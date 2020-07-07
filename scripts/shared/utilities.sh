@@ -49,7 +49,19 @@ print_latest_version() {
     echo "$latest_tag"
 }
 
-# Prints previous version, exists with positive code if it cannot
+has_single_version() {
+    local -i total_tags
+    if ! total_tags=$(count_tags); then
+        echo "Could not count tags"
+        exit 1
+    fi
+    if [ "$total_tags" -eq "1" ]; then
+        return 0 # There is only a a single tag
+    fi
+    return 1 # There are none or multiple tags
+}
+
+# Prints latest version, exists with positive code if it cannot
 print_previous_version() {  
     local -i total_tags
     if ! total_tags=$(count_tags); then
@@ -57,7 +69,7 @@ print_previous_version() {
         exit 1
     fi
     if [ "$total_tags" -le 1 ]; then
-        exit 0;
+        exit 1;
     fi
     local -r previous_tag=$(git tag | sort -V | tail -1)
     if ! is_valid_semantic_version_string "$previous_tag"; then

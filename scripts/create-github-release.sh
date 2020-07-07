@@ -56,18 +56,6 @@ release_exists() {
     fi
 }
 
-has_single_version() {
-    local -i total_tags
-    if ! total_tags=$(count_tags); then
-        echo "Could not count tags"
-        exit 1
-    fi
-    if [ "$total_tags" -eq "1" ]; then
-        return 0 # There is only a a single tag
-    fi
-    return 1 # There are none or multiple tags
-}
-
 print_release_notes() {
     local -r version="$1"
     if has_single_version; then 

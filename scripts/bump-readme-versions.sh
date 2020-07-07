@@ -38,14 +38,14 @@ file_content_contains() {
 }
 
 main() {
+  if has_single_version; then 
+      echo "Skipping.. There were no versions before."
+      return 0
+  fi
   local version_before
   if ! version_before=$(print_previous_version); then
       echo "Could not get the version before. $version_before"
       exit 1;
-  fi
-  if is_empty_or_null "$version_before"; then
-      echo "Skipping.. There were no versions before."
-      exit 0;
   fi
   local -r file_name="README.md"
   if ! file_exists "$file_name"; then
