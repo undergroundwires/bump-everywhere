@@ -32,7 +32,7 @@ tag_and_push() {
 
 increase_patch_version() {
     local -r version="$1"
-    local -r version_bits=("${version//./ }") # Replace . with space so can split into an array
+    local -r version_bits=(${version//./ }) # Replace . with space so can split into an array
     local -r major=${version_bits[0]}
     local -r minor=${version_bits[1]}
     local patch=${version_bits[2]}
