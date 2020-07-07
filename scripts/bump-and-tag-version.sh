@@ -75,7 +75,7 @@ main() {
     local last_version
     if ! last_version=$(print_latest_version) \
         || is_empty_or_null "$last_version"; then
-        echo "Could not retrieve latest version."
+        echo "Could not retrieve latest version. $last_version"
         exit 1
     fi
     local new_version

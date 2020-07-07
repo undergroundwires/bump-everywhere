@@ -49,7 +49,7 @@ main() {
   local new_version
   if ! new_version=$(print_latest_version) \
     || is_empty_or_null "$new_version"; then
-      echo "Could not retrieve the new version"
+      echo "Could not retrieve the new version. $new_version"
       exit 1;
   fi
   bump_npm_package_version "$new_version" "$file_name"

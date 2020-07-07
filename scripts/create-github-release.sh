@@ -77,7 +77,7 @@ print_release_notes() {
     local version_before
     if ! version_before=$(print_previous_version) \
         || is_empty_or_null "$version_before"; then
-        echo "Could not get the previous version"
+        echo "Could not get the previous version. $version_before"
         exit 1
     fi
     local changes
@@ -122,7 +122,7 @@ main() {
     local latest_version
     if ! latest_version=$(print_latest_version) \
         || is_empty_or_null "$latest_version"; then
-        echo "Could not get the latest version"
+        echo "Could not get the latest version. $latest_version"
         exit 1;
     fi
     if ! release_exists "$latest_version"; then

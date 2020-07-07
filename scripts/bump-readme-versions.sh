@@ -40,8 +40,8 @@ file_content_contains() {
 main() {
   local version_before
   if ! version_before=$(print_previous_version) \
-    || is_empty_or_null "$new_version"; then
-      echo "Could not get the version before"
+    || is_empty_or_null "$version_before"; then
+      echo "Could not get the version before. $version_before"
       exit 1;
   fi
   if is_empty_or_null "$version_before"; then
@@ -60,7 +60,7 @@ main() {
   local new_version
   if ! new_version=$(print_latest_version) \
     || is_empty_or_null "$new_version"; then
-      echo "Could not retrieve the new version"
+      echo "Could not retrieve the new version. $new_version"
       exit 1;
   fi
   search_and_replace "$file_name" "$version_before" "$new_version"
