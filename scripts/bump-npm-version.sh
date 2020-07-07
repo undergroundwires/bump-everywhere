@@ -25,7 +25,7 @@ match_and_replace_version() {
 }
 
 bump_npm_package_version() {
-   local -r new_version="$1" file_name="$3"
+   local -r new_version="$1" file_name="$2"
    local original
    if ! original=$(cat "$file_name"); then
     echo "Could read \"$file_name\""
