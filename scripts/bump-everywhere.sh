@@ -172,8 +172,7 @@ main() {
   update_readme
   create_changelog
   local version_tag
-  if ! version_tag="$(print_latest_version)" \
-    || is_empty_or_null "$version_tag"; then
+  if ! version_tag="$(print_latest_version)"; then
     echo "Could not retrieve latest version. $version_tag"
     exit 1
   fi

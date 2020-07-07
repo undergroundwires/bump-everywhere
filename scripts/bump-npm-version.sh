@@ -47,8 +47,7 @@ main() {
     exit 0;
   fi
   local new_version
-  if ! new_version=$(print_latest_version) \
-    || is_empty_or_null "$new_version"; then
+  if ! new_version=$(print_latest_version); then
       echo "Could not retrieve the new version. $new_version"
       exit 1;
   fi

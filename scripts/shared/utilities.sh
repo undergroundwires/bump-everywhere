@@ -37,6 +37,7 @@ is_valid_semantic_version_string() {
     return 0
 }
 
+# Prints latest version, exists with positive code if it cannot
 print_latest_version() {
     if ! repository_has_any_tags; then
         exit 1;
@@ -48,6 +49,7 @@ print_latest_version() {
     echo "$latest_tag"
 }
 
+# Prints previous version, exists with positive code if it cannot
 print_previous_version() {  
     local -i total_tags
     if ! total_tags=$(count_tags); then

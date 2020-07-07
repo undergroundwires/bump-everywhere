@@ -73,14 +73,12 @@ main() {
         exit 0
     fi
     local last_version
-    if ! last_version=$(print_latest_version) \
-        || is_empty_or_null "$last_version"; then
+    if ! last_version=$(print_latest_version); then
         echo "Could not retrieve latest version. $last_version"
         exit 1
     fi
     local new_version
-    if ! new_version=$(increase_patch_version "$last_version") \
-        || is_empty_or_null "$new_version"; then
+    if ! new_version=$(increase_patch_version "$last_version"); then
         echo "Could not increase the version"
         exit 1
     fi
