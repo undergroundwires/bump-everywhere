@@ -52,7 +52,14 @@ is_latest_commit_tagged() {
         echo "Could not check the tags of the commit $latest_commit"
         exit 1
     fi
-    if has_value "$tag_of_latest_commit"; then return 0; else return 1; fi
+    if ! has_value "$tag_of_latest_commit"; then
+        return 1;
+    fi
+    if ! is_valid_semantic_version_string; then
+        echo "Latest commit tag \"$tag_of_latest_commit\" in commit \"$latest_commit\" is not a version string"
+        exit 1
+    fi
+    return 0
 }
 
 main() {
@@ -67,13 +74,13 @@ main() {
     fi
     local last_version
     if ! last_version=$(print_latest_version) \
-        || ! has_value "$last_version"; then
+        || is_empty_or_null "$last_version"; then
         echo "Could not retrieve latest version."
         exit 1
     fi
     local new_version
     if ! new_version=$(increase_patch_version "$last_version") \
-        || ! has_value "$new_version"; then
+        || is_empty_or_null "$new_version"; then
         echo "Could not increase the version"
         exit 1
     fi

@@ -39,7 +39,8 @@ file_content_contains() {
 
 main() {
   local version_before
-  if ! version_before=$(print_previous_version); then
+  if ! version_before=$(print_previous_version) \
+    || is_empty_or_null "$new_version"; then
       echo "Could not get the version before"
       exit 1;
   fi
