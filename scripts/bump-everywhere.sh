@@ -121,13 +121,12 @@ create_changelog() {
 }
 
 update_npm() {
-  local -r latest_version_tag="$1"
   local -r file_name="package.json"
   if ! file_exists "$file_name"; then
     return 0
   fi
   echo "Updating npm version"
-  bash "$SCRIPTS_DIRECTORY/bump-npm-version.sh" --version "$latest_version_tag" \
+  bash "$SCRIPTS_DIRECTORY/bump-npm-version.sh" \
     || { echo "Could not bump npm version"; exit 1; }
   git add "$file_name" \
     || { echo "git add failed for $file_name"; exit 1; }
@@ -176,7 +175,7 @@ main() {
     echo "Could not retrieve latest version. $version_tag"
     exit 1
   fi
-  update_npm "$version_tag"
+  update_npm
   commit_and_push "$version_tag"
   create_release
 }
