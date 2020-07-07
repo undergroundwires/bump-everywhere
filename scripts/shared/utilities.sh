@@ -69,9 +69,10 @@ print_previous_version() {
         exit 1
     fi
     if [ "$total_tags" -le 1 ]; then
+        echo "There's only a single version"
         exit 1;
     fi
-    local -r previous_tag=$(git tag | sort -V | tail -1)
+    local -r previous_tag=$(git tag | sort -V | tail -2 | head -1)
     if ! is_valid_semantic_version_string "$previous_tag"; then
         exit 1;
     fi
