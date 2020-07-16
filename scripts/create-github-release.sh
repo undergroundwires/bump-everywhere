@@ -56,18 +56,6 @@ release_exists() {
     fi
 }
 
-has_single_version() {
-    local -i total_tags
-    if ! total_tags=$(count_tags); then
-        echo "Could not count tags"
-        exit 1
-    fi
-    if [ "$total_tags" -eq "1" ]; then
-        return 0 # There is only a a single tag
-    fi
-    return 1 # There are none or multiple tags
-}
-
 print_release_notes() {
     local -r version="$1"
     if has_single_version; then 
@@ -75,9 +63,8 @@ print_release_notes() {
         return 0
     fi
     local version_before
-    if ! version_before=$(print_previous_version) \
-        || is_empty_or_null "$version_before"; then
-        echo "Could not get the previous version"
+    if ! version_before=$(print_previous_version); then
+        echo "Could not get the previous version. $version_before"
         exit 1
     fi
     local changes
@@ -120,9 +107,8 @@ create_release() {
 
 main() {
     local latest_version
-    if ! latest_version=$(print_latest_version) \
-        || is_empty_or_null "$latest_version"; then
-        echo "Could not get the latest version"
+    if ! latest_version=$(print_latest_version); then
+        echo "Could not get the latest version. $latest_version"
         exit 1;
     fi
     if ! release_exists "$latest_version"; then

@@ -22,12 +22,12 @@ source "$SCRIPTS_DIRECTORY/shared/utilities.sh"
 
 tag_and_push() {
     local -r tag="$1"
-    echo "Creating tag: $tag"
+    echo "Creating tag: \"$tag\""
     git tag "$tag" \
-        || { echo "Could not tag: $tag" ; exit 1; }
+        || { echo "Could not tag: \"$tag\"" ; exit 1; }
     git push -u origin master "$tag" \
-        || { echo "Could not push the tag: $tag"; exit 1; }
-    echo "Tag created and pushed: $tag"
+        || { echo "Could not push the tag: \"$tag\""; exit 1; }
+    echo "Tag created and pushed: \"$tag\""
 }
 
 increase_patch_version() {
@@ -52,7 +52,14 @@ is_latest_commit_tagged() {
         echo "Could not check the tags of the commit $latest_commit"
         exit 1
     fi
-    if has_value "$tag_of_latest_commit"; then return 0; else return 1; fi
+    if ! has_value "$tag_of_latest_commit"; then
+        return 1;
+    fi
+    if ! is_valid_semantic_version_string "$tag_of_latest_commit"; then
+        echo "Latest commit tag \"$tag_of_latest_commit\" in commit \"$latest_commit\" is not a version string"
+        exit 1
+    fi
+    return 0
 }
 
 main() {
@@ -66,18 +73,17 @@ main() {
         exit 0
     fi
     local last_version
-    if ! last_version=$(print_latest_version) \
-        || ! has_value "$last_version"; then
-        echo "Could not retrieve latest version."
+    if ! last_version=$(print_latest_version); then
+        echo "Could not retrieve latest version. $last_version"
         exit 1
     fi
     local new_version
     if ! new_version=$(increase_patch_version "$last_version") \
-        || ! has_value "$new_version"; then
+        || is_empty_or_null "$new_version"; then
         echo "Could not increase the version"
         exit 1
     fi
-    echo "Updating $last_version to $new_version"
+    echo "Updating \"$last_version\" to \"$new_version\""
     tag_and_push "$new_version"
 }
 
