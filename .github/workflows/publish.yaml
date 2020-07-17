@@ -10,6 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: master # otherwise it defaults to the version tag missing bump commit
+          fetch-depth: 0 # fetch all history
+      - name: Checkout to bump commit
+        run: git checkout "$(git rev-list "${{ github.event.release.tag_name }}"..master | tail -1)"
       - uses: actions/setup-node@v1
         with:
           node-version: 14.x
