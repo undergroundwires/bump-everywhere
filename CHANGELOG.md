@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.2 (2020-07-20)
+
+* only release when tags are pushed #3 | [commit](https://github.com/undergroundwires/bump-everywhere/commit/2bbb364801d33014d52fc030c012574041040306)
+* validate version (#4) | [commit](https://github.com/undergroundwires/bump-everywhere/commit/aff2c239f356e6a757b8efdb14cf0526f421cce0)
+* fixed ci-cd publishing older version | [commit](https://github.com/undergroundwires/bump-everywhere/commit/666151e85f0e4a91a5b0141832f1518ee58b73b0)
+* ci-cd: run tests on each push | [commit](https://github.com/undergroundwires/bump-everywhere/commit/e34c7795e3e6678377cb2ad9102855e7f7774c2d)
+* fixed git user is not being set | [commit](https://github.com/undergroundwires/bump-everywhere/commit/c705e8b030534121861d7b53134b2d35dc11afde)
+
+[compare](https://github.com/undergroundwires/bump-everywhere/compare/1.0.1...1.0.2)
+
 ## 1.0.1 (2020-06-14)
 
 * logging difference in right order | [commit](https://github.com/undergroundwires/bump-everywhere/commit/44f796813d4a3a112392f650e82169e4499e94fe)

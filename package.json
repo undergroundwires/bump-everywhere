@@ -1,6 +1,6 @@
 {
     "name": "bump-everywhere",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Automate versioning, changelog creations and GitHub releases using bash, GitHub action, npm or docker.",
     "main": "./scripts/bump-everywhere.sh",
     "bin": {
