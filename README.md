@@ -125,7 +125,11 @@ You can also use following scripts individually (check script files for usage, p
 
 ## Some example usages
 
-[privacy.sexy](https://github.com/undergroundwires/privacy.sexy#gitops-cicd-to-aws) | [safe-email](https://github.com/undergroundwires/safe-email#gitops) | [ez-consent](https://github.com/undergroundwires/ez-consent#gitops) | [aws-static-site-with-cd](https://github.com/undergroundwires/aws-static-site-with-cd)
+- [bump-everywhere](https://github.com/undergroundwires/bump-everywhere#gitops): Repository itself is automatically versioned & released using its own action
+- [privacy.sexy](https://github.com/undergroundwires/privacy.sexy#gitops-cicd-to-aws)
+- [safe-email](https://github.com/undergroundwires/safe-email#gitops)
+- [ez-consent](https://github.com/undergroundwires/ez-consent#gitops)
+- [aws-static-site-with-cd](https://github.com/undergroundwires/aws-static-site-with-cd)
 
 ## GitOps
 
