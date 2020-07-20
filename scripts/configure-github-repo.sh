@@ -2,7 +2,10 @@
 
 # Sets up credentials & user to be able to push to a GitHub repository
 # Example usage:
-#   bash "configure-github-repo.sh" --repository "undergroundwires/bump-everywhere" --user "undergroundwires-bot" --token "SECRET-PAT-TOKEN"
+#   bash "configure-github-repo.sh" \
+#     --repository "undergroundwires/bump-everywhere" \
+#     --user "undergroundwires-bot" \
+#     --token "SECRET-PAT-TOKEN"
 # Prerequisites:
 #   - Ensure your current folder is the repository root
 # Dependencies:

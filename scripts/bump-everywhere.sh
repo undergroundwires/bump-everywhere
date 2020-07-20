@@ -87,7 +87,7 @@ exit_if_rerun() {
 configure_credentials() {
   echo "Setting up credentials"
   bash "$SCRIPTS_DIRECTORY/configure-github-repo.sh" \
-          --user "undergroundwires-bot" \
+          --user "$GIT_USER" \
           --repository "$REPOSITORY" \
           --token "$GIT_TOKEN" \
     || { echo "Could not configure credentials"; exit 1; }
