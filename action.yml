@@ -13,6 +13,10 @@ inputs:
     description: Personal access token (PAT) used to clone & push to the repository.
     required: false
     default: ${{ github.token }}
+  release-type:
+    description: The type of the GitHub release
+    required: false
+    default: 'release'
   release-token:
     description: Personal access token (PAT) used to release to GitHub.
     required: false
@@ -24,6 +28,7 @@ runs:
     - ${{ inputs.repository }}
     - ${{ inputs.user }}
     - ${{ inputs.git-token }}
+    - ${{ inputs.release-type }}
     - ${{ inputs.release-token }}
 
 branding:

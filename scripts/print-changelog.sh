@@ -21,15 +21,6 @@ readonly LOG_COMMITS_SCRIPT_PATH="$SCRIPTS_DIRECTORY/shared/log-commits.sh"
 # shellcheck source=scripts/shared/utilities.sh
 source "$SCRIPTS_DIRECTORY/shared/utilities.sh"
 
-# Parse parameters
-while [[ "$#" -gt 0 ]]; do case $1 in
-  --repository) REPOSITORY="$2"; shift;;
-  *) echo "Unknown parameter passed: $1"; exit 1;;
-esac; shift; done
-
-# Validate parameters
-if is_empty_or_null "$REPOSITORY"; then echo "Repository name is not set."; exit 1; fi;
-
 print_title() {
   local -r tag="$1"
   local tag_date
@@ -46,6 +37,7 @@ print_all_versions_from_latest() {
 }
 
 print_tags_except_first() {
+  local -r repository="$1"
   local tags
   if ! tags=$(print_all_versions_from_latest); then
     echo "Could not list & sort tags"
@@ -58,7 +50,7 @@ print_tags_except_first() {
         print_title "$current_tag"
         local changes
         if ! changes=$(bash "$LOG_COMMITS_SCRIPT_PATH" \
-            --repository "$REPOSITORY" \
+            --repository "$repository" \
             --current "$current_tag" \
             --previous "$next_tag"); then
           echo "$LOG_COMMITS_SCRIPT_PATH has failed:"
@@ -68,7 +60,7 @@ print_tags_except_first() {
         if [[ $changes ]]; then
           printf "%s\n\n" "$changes"
         fi
-        printf "[compare](https://github.com/%s/compare/%s...%s)" "$REPOSITORY" "$next_tag" "$current_tag"
+        printf "[compare](https://github.com/%s/compare/%s...%s)" "$repository" "$next_tag" "$current_tag"
         printf "\n"
     fi
     current_tag=${next_tag}
@@ -90,6 +82,7 @@ print_commit_sha_of_tag() {
 }
 
 print_first_tag() {
+  local -r repository="$1"
   local first_tag
   if ! first_tag=$(print_first_version) \
     || is_empty_or_null "$first_tag"; then
@@ -111,12 +104,12 @@ print_first_tag() {
   fi
   if [ "$first_commit_with_tag_sha" == "$initial_commit_sha" ]; then
     printf "%s | [commits](https://github.com/%s/commit/%s)" \
-        "Initial release" "$REPOSITORY" "$initial_commit_sha"
+        "Initial release" "$repository" "$initial_commit_sha"
     return 0
   fi
   local changes
   if ! changes=$(bash "$LOG_COMMITS_SCRIPT_PATH" \
-      --repository "$REPOSITORY" \
+      --repository "$repository" \
       --current "$first_commit_with_tag_sha" \
       --previous "$initial_commit_sha"); then
     echo "$LOG_COMMITS_SCRIPT_PATH has failed"
@@ -126,14 +119,21 @@ print_first_tag() {
     printf "%s\n" "$changes"
   fi
   printf "[compare](https://github.com/%s/compare/%s...%s)" \
-    "$REPOSITORY" "$initial_commit_sha" "$first_commit_with_tag_sha"
+    "$repository" "$initial_commit_sha" "$first_commit_with_tag_sha"
 }
 
 main() {
+  local -r repository="$1"
+  if is_empty_or_null "$repository"; then echo "Repository name is not set."; exit 1; fi;
   printf "# Changelog\n"
-  print_tags_except_first
-  print_first_tag
+  print_tags_except_first "$repository"
+  print_first_tag "$repository"
   printf "\n\n"
 }
 
-main
+while [[ "$#" -gt 0 ]]; do case $1 in
+  --repository) REPOSITORY="$2"; shift;;
+  *) echo "Unknown parameter passed: $1"; exit 1;;
+esac; shift; done
+
+main "$REPOSITORY"

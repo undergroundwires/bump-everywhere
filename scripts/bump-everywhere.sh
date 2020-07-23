@@ -24,21 +24,6 @@ readonly COMMIT_MESSAGE="⬆️ bumped to $VERSION_PLACEHOLDER"
 # shellcheck source=scripts/shared/utilities.sh
 source "$SCRIPTS_DIRECTORY/shared/utilities.sh"
 
-# Parse parameters
-while [[ "$#" -gt 0 ]]; do case $1 in
-  --repository) REPOSITORY="$2"; shift;;
-  --user) GIT_USER="$2"; shift;;
-  --git-token) GIT_TOKEN="$2"; shift;;
-  --release-token) RELEASE_TOKEN="$2"; shift;;
-  *) echo "Unknown parameter passed: $1"; exit 1;;
-esac; shift; done
-
-# Validate parameters
-if is_empty_or_null "$REPOSITORY"; then echo "Repository name is not set."; exit 1; fi;
-if is_empty_or_null "$GIT_USER"; then echo "Git user is not set."; exit 1; fi;
-if is_empty_or_null "$GIT_TOKEN"; then echo "Git access token is not set."; exit 1; fi;
-if is_empty_or_null "$RELEASE_TOKEN"; then echo "Release access token is not set."; exit 1; fi;
-
 print_name() {
   echo "-------------------------------------------------------"
   echo "-------------------------------------------------------"
@@ -48,15 +33,16 @@ print_name() {
 }
 
 clone () {
-  echo "Cloning $REPOSITORY"
+  local -r repository="$1" git_token="$2"
+  echo "Cloning $repository"
   local temp_directory
   if ! temp_directory=$(mktemp -d) \
     || is_empty_or_null "$temp_directory"; then
     echo "Could not create a temporary directory"
     exit 1;
   fi
-  git clone "https://x-access-token:$GIT_TOKEN@github.com/$REPOSITORY.git" "$temp_directory" \
-    || { echo "git clone failed for $REPOSITORY"; exit 1; }
+  git clone "https://x-access-token:$git_token@github.com/$repository.git" "$temp_directory" \
+    || { echo "git clone failed for $repository"; exit 1; }
   cd "$temp_directory" \
     || { echo "Could not locate folder $temp_directory"; exit 1; }
   local latest_commit_sha
@@ -85,11 +71,12 @@ exit_if_rerun() {
 }
 
 configure_credentials() {
+  local -r repository="$1" git_token="$2" git_user="$3"
   echo "Setting up credentials"
   bash "$SCRIPTS_DIRECTORY/configure-github-repo.sh" \
-          --user "$GIT_USER" \
-          --repository "$REPOSITORY" \
-          --token "$GIT_TOKEN" \
+          --user "$git_user" \
+          --repository "$repository" \
+          --token "$git_token" \
     || { echo "Could not configure credentials"; exit 1; }
 }
 
@@ -106,8 +93,9 @@ update_readme() {
 }
 
 create_changelog() {
+  local -r repository="$1"
   local logs
-  if ! logs=$(bash "$SCRIPTS_DIRECTORY/print-changelog.sh" --repository "$REPOSITORY") \
+  if ! logs=$(bash "$SCRIPTS_DIRECTORY/print-changelog.sh" --repository "$repository") \
     || is_empty_or_null "$logs"; then
     printf "print-changelog.sh has failed\n%s" "$logs"
     exit 1;
@@ -151,25 +139,38 @@ commit_and_push() {
     git commit -m "$printable_commit_message" \
       || { echo "Could not commit wit the message: $printable_commit_message"; exit 1; }
     git push -u origin master \
-      || { echo "Could not push changelog"; exit 1; }
+      || { echo "Could not git push changes"; exit 1; }
   fi
 }
 
 create_release() {
+  local -r repository="$1" release_token="$2" release_type="$3"
   bash "$SCRIPTS_DIRECTORY/create-github-release.sh" \
-      --repository "$REPOSITORY" \
-      --token "$RELEASE_TOKEN" \
+      --repository "$repository" \
+      --token "$release_token" \
+      --type "$release_type" \
       || { echo "Could not create release"; exit 1; }
 }
 
+validate_parameters() {
+  local -r repository="$1" git_user="$2" git_token="$3" release_type="$4" release_token="$5"
+  if is_empty_or_null "$repository"; then echo "Repository name is not set."; exit 1; fi;
+  if is_empty_or_null "$git_user"; then echo "Git user is not set."; exit 1; fi;
+  if is_empty_or_null "$git_token"; then echo "Git access token is not set."; exit 1; fi;
+  if is_empty_or_null "$release_type"; then echo "Release type is not set."; exit 1; fi;
+  if is_empty_or_null "$release_token"; then echo "Release access token is not set."; exit 1; fi;
+}
+
 main() {
+  local -r repository="$1" git_user="$2" git_token="$3" release_type="$4" release_token="$5"
+  validate_parameters "$repository" "$git_user" "$git_token" "$release_type" "$release_token"
   print_name
-  clone
+  clone "$repository" "$git_token"
   exit_if_rerun
-  configure_credentials
+  configure_credentials "$repository" "$git_token" "$git_user"
   bump_and_tag
   update_readme
-  create_changelog
+  create_changelog "$repository"
   local version_tag
   if ! version_tag="$(print_latest_version)"; then
     echo "Could not retrieve latest version. $version_tag"
@@ -177,7 +178,17 @@ main() {
   fi
   update_npm
   commit_and_push "$version_tag"
-  create_release
+  create_release "$repository" "$release_token" "$release_type"
 }
 
-main
+# Parse parameters
+while [[ "$#" -gt 0 ]]; do case $1 in
+  --repository) REPOSITORY="$2"; shift;;
+  --user) GIT_USER="$2"; shift;;
+  --git-token) GIT_TOKEN="$2"; shift;;
+  --release-type) RELEASE_TYPE="$2"; shift;;
+  --release-token) RELEASE_TOKEN="$2"; shift;;
+  *) echo "Unknown parameter passed: $1"; exit 1;;
+esac; shift; done
+
+main "$REPOSITORY" "$GIT_USER" "$GIT_TOKEN" "$RELEASE_TYPE" "$RELEASE_TOKEN"

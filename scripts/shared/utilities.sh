@@ -83,3 +83,7 @@ file_exists() {
     local -r file=$1;
     [[ -f $file ]];
 }
+
+equals_case_insensitive() { 
+    [[ "${1,,}" = "${2,,}" ]];
+}

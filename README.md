@@ -37,7 +37,7 @@ It supports safe re-runs, it means that if you can run it for an already bumped 
     # (Optional) Default: ${{ github.repository  }}
     repository: ''
 
-    # Name of the user who'll commit the changelog
+    # Name of the user who'll commit the changelog, e.g. bot-user
     # (Optional) Default: ${{ github.actor }}
     user: ''
 
@@ -46,7 +46,13 @@ It supports safe re-runs, it means that if you can run it for an already bumped 
     # (Optional) Default: ${{ github.token }}
     git-token: ''
 
+    # The type of the GitHub release
+    # Options: 'release' | 'prerelease' | 'draft' | 'none' (does not release)
+    # (Optional) Default: 'release'
+    release-type: ''
+
     # Personal access token (PAT) used to release to GitHub.
+    # Used only if release-type is not "none"
     # If you use default, it'll not trigger other actions, but your own PAT then it triggers new actions
     # (Optional) Default: ${{ github.token }}
     release-token: ''
@@ -60,13 +66,13 @@ With installation:
 
 ```sh
 npm install -g bump-everywhere # or "npm install bump-everywhere --save-dev" for local installations
-bump-everywhere --repository "undergroundwires/privacy.sexy" --user "bot-commiter-name" --git-token "PAT_TOKEN" --release-token "PAT_TOKEN"
+bump-everywhere --repository "undergroundwires/privacy.sexy" --user "bot-commiter-name" --git-token "PAT_TOKEN" --relase-type "release" --release-token "PAT_TOKEN"
 ```
 
 Or without installation:
 
 ```sh
-npx bump-everywhere --repository "undergroundwires/privacy.sexy" --user "bot-commiter-name" --git-token "PAT_TOKEN" --release-token "PAT_TOKEN"
+npx bump-everywhere --repository "undergroundwires/privacy.sexy" --user "bot-commiter-name" --git-token "PAT_TOKEN" --relase-type "release" --release-token "PAT_TOKEN"
 ```
 
 [↑](#bump-everywhere)
@@ -76,26 +82,35 @@ npx bump-everywhere --repository "undergroundwires/privacy.sexy" --user "bot-com
 - To get the image you can either:
   - Pull from docker hub using `docker pull undergroundwires/bump-everywhere:latest`
   - Or build image yourself using `docker build . --tag undergroundwires/bump-everywhere:latest`
-- Run with arguments: `docker run undergroundwires/bump-everywhere "undergroundwires/privacy.sexy" "bot-user" "GitHub PAT for pushes" "GitHub PAT for releases"`
-  - Parameter order: repository, user, git push token, GitHub release token
+- Run with arguments:
+
+  ```sh
+    docker run undergroundwires/bump-everywhere \
+      "undergroundwires/privacy.sexy" \
+      "bot-user" \
+      "GitHub PAT for pushes" \
+      "prerelase" \
+      "GitHub PAT for releases"
+  ```
 
 [↑](#bump-everywhere)
 
 ### Option 4. Use scripts
 
-1. Ensure `bash`, `git`, `curl`, `jq` exists in your environment
+1. Ensure `bash` (4 or newer), `git`, `curl`, `jq` exists in your environment
    - run e.g. `apk add bash git curl jq`
 2. Clone this repository: `git clone https://github.com/undergroundwires/bump-everywhere`
    - or optionally add this repository as git submodule: `git submodule add https://github.com/undergroundwires/bump-everywhere`
 3. Call the script as following :
 
-```sh
-bash "scripts/bump-everywhere.sh" \
-    --repository "undergroundwires/privacy.sexy" \
-    --user "bot-commiter-name" \
-    --git-token "PAT_TOKEN" \
-    --release-token "PAT_TOKEN"
-```
+   ```sh
+     bash "scripts/bump-everywhere.sh" \
+         --repository "undergroundwires/privacy.sexy" \
+         --user "bot-commiter-name" \
+         --git-token "PAT_TOKEN" \
+         --release-type "draft" \
+         --release-token "PAT_TOKEN"
+   ```
 
 [↑](#bump-everywhere)
 
@@ -104,8 +119,8 @@ bash "scripts/bump-everywhere.sh" \
 - You manually tag your last commit to update major & minor versions.
 - E.g.
   - `git commit -m "bumped version to 1.2.0" --allow-empty`
-  - `git tag  1.2.0`
-  - `git push && git push --tags`
+  - `git tag 1.2.0`
+  - `git push && git push origin 1.2.0`
 
 [↑](#bump-everywhere)
 
@@ -139,6 +154,7 @@ CI/CD is fully automated for this repo using different GIT events & GitHub actio
 
 ## Support
 
+- Give it a star ⭐
 - Feel free to use the badge in the `README.md` of repository where you use bump-everywhere:
   - (it'll look like: [![Auto-versioned by bump-everywhere](https://github.com/undergroundwires/bump-everywhere/blob/master/badge.svg?raw=true)](https://github.com/undergroundwires/bump-everywhere))
 
