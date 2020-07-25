@@ -54,7 +54,7 @@ clone () {
   echo "Latest commit sha: $latest_commit_sha"
 }
 
-exit_if_rerun() {
+is_rerun() {
   echo "Checking if this run is a re-run"
   local last_commit_message
   if ! last_commit_message=$(git log -1 --pretty=%B); then
@@ -63,10 +63,9 @@ exit_if_rerun() {
   fi
   local -r expected_pattern="^${COMMIT_MESSAGE/$VERSION_PLACEHOLDER/"[0-9]+.[0-9]+.[0-9]+"}$"
   if [[ $last_commit_message =~ $expected_pattern ]]; then
-    echo "It's a re-run of the script. Versioning will be skipped";
-    exit 0;
+    return 0
   else
-    echo "Not a re-run"
+    return 1
   fi
 }
 
@@ -166,18 +165,21 @@ main() {
   validate_parameters "$repository" "$git_user" "$git_token" "$release_type" "$release_token"
   print_name
   clone "$repository" "$git_token"
-  exit_if_rerun
-  configure_credentials "$repository" "$git_token" "$git_user"
-  bump_and_tag
-  update_readme
-  create_changelog "$repository"
-  local version_tag
-  if ! version_tag="$(print_latest_version)"; then
-    echo "Could not retrieve latest version. $version_tag"
-    exit 1
+  if is_rerun; then 
+    echo "It's a re-run of the script, versioning will be skipped";
+  else
+    configure_credentials "$repository" "$git_token" "$git_user"
+    bump_and_tag
+    update_readme
+    create_changelog "$repository"
+    local version_tag
+    if ! version_tag="$(print_latest_version)"; then
+      echo "Could not retrieve latest version. $version_tag"
+      exit 1
+    fi
+    update_npm
+    commit_and_push "$version_tag"
   fi
-  update_npm
-  commit_and_push "$version_tag"
   create_release "$repository" "$release_token" "$release_type"
 }
 
