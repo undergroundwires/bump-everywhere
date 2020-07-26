@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.2 (2020-07-25)
+
+* simplified ci-cd | [commit](https://github.com/undergroundwires/bump-everywhere/commit/85becb775118787291815d40df8e603336c03033)
+* allow setting different release options (#5) | [commit](https://github.com/undergroundwires/bump-everywhere/commit/cec4b0197d1d292db5a85762b9fd7fb8aeba6ca8)
+* releases (if not exists) on rerun | [commit](https://github.com/undergroundwires/bump-everywhere/commit/c1fb9bcbb043f2424aaed4c313d4adafc135eef5)
+* prevented word splitting | [commit](https://github.com/undergroundwires/bump-everywhere/commit/a3fe9c3445d7a2d05cfd4e5e9f8203280bd751b7)
+
+[compare](https://github.com/undergroundwires/bump-everywhere/compare/1.0.2...1.1.2)
+
 ## 1.0.2 (2020-07-20)
 
 * only release when tags are pushed #3 | [commit](https://github.com/undergroundwires/bump-everywhere/commit/2bbb364801d33014d52fc030c012574041040306)
