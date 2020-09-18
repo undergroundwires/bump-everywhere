@@ -37,9 +37,13 @@ It supports safe re-runs, it means that if you can run it for an already bumped 
     # (Optional) Default: ${{ github.repository  }}
     repository: ''
 
-    # Name of the user who'll commit the changelog, e.g. bot-user
+    # Name of the user who will do the bump commit
     # (Optional) Default: ${{ github.actor }}
     user: ''
+
+    # Commit message that will be used in the bump commit
+    # (Optional) Default: ⬆️ bumped to {{version}}
+    commit-message: ''
 
     # Personal access token (PAT) used to clone & push to the repository.
     # If you use default, it'll not trigger other actions, but your own PAT then it triggers new actions
@@ -66,14 +70,10 @@ With installation:
 
 ```sh
 npm install -g bump-everywhere # or "npm install bump-everywhere --save-dev" for local installations
-bump-everywhere --repository "undergroundwires/privacy.sexy" --user "bot-commiter-name" --git-token "PAT_TOKEN" --relase-type "release" --release-token "PAT_TOKEN"
+bump-everywhere --repository "undergroundwires/privacy.sexy" --user "bot-commiter-name" --git-token "PAT_TOKEN" --relase-type "release" --release-token "PAT_TOKEN" --commit-message "⬆️ Bump everywhere"
 ```
 
-Or without installation:
-
-```sh
-npx bump-everywhere --repository "undergroundwires/privacy.sexy" --user "bot-commiter-name" --git-token "PAT_TOKEN" --relase-type "release" --release-token "PAT_TOKEN"
-```
+Or without installation you can directly run it using `npx bump-everywhere <parameters...>`
 
 [↑](#bump-everywhere)
 
@@ -90,7 +90,8 @@ npx bump-everywhere --repository "undergroundwires/privacy.sexy" --user "bot-com
       "bot-user" \
       "GitHub PAT for pushes" \
       "prerelase" \
-      "GitHub PAT for releases"
+      "GitHub PAT for releases" \
+      "⬆️ bump to {{version}}"
   ```
 
 [↑](#bump-everywhere)
@@ -109,7 +110,8 @@ npx bump-everywhere --repository "undergroundwires/privacy.sexy" --user "bot-com
          --user "bot-commiter-name" \
          --git-token "PAT_TOKEN" \
          --release-type "draft" \
-         --release-token "PAT_TOKEN"
+         --release-token "PAT_TOKEN" \
+         --commit-message "⬆️ bump to {{version}}"
    ```
 
 [↑](#bump-everywhere)

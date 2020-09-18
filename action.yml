@@ -1,14 +1,18 @@
 name: bump-everywhere
 description: Bump git tag to the next version, generate a changelog file, and create a release with auto-generated release notes
 inputs:
-  user:
-    description: Name of the user who'll commit the changelog
-    required: false
-    default: ${{ github.actor }}
   repository:
     description: Repository name with owner to bump & release. For example, undergroundwires/bump-everywhere
     required: false
     default: ${{ github.repository }}
+  user:
+    description: Name of the user who will do the bump commit
+    required: false
+    default: ${{ github.actor }}
+  commit-message:
+    description: Commit message that will be used in the bump commit
+    required: false
+    default: "⬆️ bumped to {{version}}"
   git-token:
     description: Personal access token (PAT) used to clone & push to the repository.
     required: false
@@ -30,7 +34,7 @@ runs:
     - ${{ inputs.git-token }}
     - ${{ inputs.release-type }}
     - ${{ inputs.release-token }}
-
+    - ${{ inputs.commit-message }}
 branding:
   icon: 'arrow-up'  
   color: 'yellow'

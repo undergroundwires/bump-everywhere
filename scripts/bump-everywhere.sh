@@ -17,8 +17,7 @@
 
 # Globals
 readonly SCRIPTS_DIRECTORY=$(dirname "$0")
-readonly VERSION_PLACEHOLDER="{version}"
-readonly COMMIT_MESSAGE="⬆️ bumped to $VERSION_PLACEHOLDER"
+readonly VERSION_PLACEHOLDER="{{version}}"
 
 # Import dependencies
 # shellcheck source=scripts/shared/utilities.sh
@@ -55,13 +54,14 @@ clone () {
 }
 
 is_rerun() {
+  local -r commit_message="$2"
   echo "Checking if this run is a re-run"
   local last_commit_message
   if ! last_commit_message=$(git log -1 --pretty=%B); then
     echo "Could not retrieve latest commit message"
     exit 1
   fi
-  local -r expected_pattern="^${COMMIT_MESSAGE/$VERSION_PLACEHOLDER/"[0-9]+.[0-9]+.[0-9]+"}$"
+  local -r expected_pattern="^${commit_message/$VERSION_PLACEHOLDER/"[0-9]+.[0-9]+.[0-9]+"}$"
   if [[ $last_commit_message =~ $expected_pattern ]]; then
     return 0
   else
@@ -129,12 +129,12 @@ has_uncommited_changes() {
 }
 
 commit_and_push() {
-  local -r latest_version_tag="$1"
+  local -r latest_version_tag="$1" -r commit_message="$2"
   if has_uncommited_changes; then
     echo "No uncommited changes"
   else
     echo "Committing & pushing"
-    local -r printable_commit_message=${COMMIT_MESSAGE/$VERSION_PLACEHOLDER/$latest_version_tag}
+    local -r printable_commit_message=${commit_message/$VERSION_PLACEHOLDER/$latest_version_tag}
     git commit -m "$printable_commit_message" \
       || { echo "Could not commit wit the message: $printable_commit_message"; exit 1; }
     git push -u origin master \
@@ -143,7 +143,7 @@ commit_and_push() {
 }
 
 create_release() {
-  local -r repository="$1" release_token="$2" release_type="$3"
+  local -r repository="$1" -r release_token="$2" -r release_type="$3"
   bash "$SCRIPTS_DIRECTORY/create-github-release.sh" \
       --repository "$repository" \
       --token "$release_token" \
@@ -152,20 +152,21 @@ create_release() {
 }
 
 validate_parameters() {
-  local -r repository="$1" git_user="$2" git_token="$3" release_type="$4" release_token="$5"
+  local -r repository="$1" git_user="$2" git_token="$3" release_type="$4" release_token="$5" commit_message="$6"
   if is_empty_or_null "$repository"; then echo "Repository name is not set."; exit 1; fi;
   if is_empty_or_null "$git_user"; then echo "Git user is not set."; exit 1; fi;
   if is_empty_or_null "$git_token"; then echo "Git access token is not set."; exit 1; fi;
   if is_empty_or_null "$release_type"; then echo "Release type is not set."; exit 1; fi;
   if is_empty_or_null "$release_token"; then echo "Release access token is not set."; exit 1; fi;
+  if is_empty_or_null "$commit_message"; then echo "Commit message is not set."; exit 1; fi;
 }
 
 main() {
-  local -r repository="$1" git_user="$2" git_token="$3" release_type="$4" release_token="$5"
-  validate_parameters "$repository" "$git_user" "$git_token" "$release_type" "$release_token"
+  local -r repository="$1" git_user="$2" git_token="$3" release_type="$4" release_token="$5" commit_message="$6"
+  validate_parameters "$repository" "$git_user" "$git_token" "$release_type" "$release_token" "$commit_message"
   print_name
   clone "$repository" "$git_token"
-  if is_rerun; then 
+  if is_rerun "$commit_message"; then 
     echo "It's a re-run of the script, versioning will be skipped";
   else
     configure_credentials "$repository" "$git_token" "$git_user"
@@ -178,7 +179,7 @@ main() {
       exit 1
     fi
     update_npm
-    commit_and_push "$version_tag"
+    commit_and_push "$version_tag" "$commit_message"
   fi
   create_release "$repository" "$release_token" "$release_type"
 }
@@ -190,7 +191,8 @@ while [[ "$#" -gt 0 ]]; do case $1 in
   --git-token) GIT_TOKEN="$2"; shift;;
   --release-type) RELEASE_TYPE="$2"; shift;;
   --release-token) RELEASE_TOKEN="$2"; shift;;
+  --commit-message) COMMIT_MESSAGE="$2"; shift;;
   *) echo "Unknown parameter passed: $1"; exit 1;;
 esac; shift; done
 
-main "$REPOSITORY" "$GIT_USER" "$GIT_TOKEN" "$RELEASE_TYPE" "$RELEASE_TOKEN"
+main "$REPOSITORY" "$GIT_USER" "$GIT_TOKEN" "$RELEASE_TYPE" "$RELEASE_TOKEN" "$COMMIT_MESSAGE"
