@@ -42,7 +42,7 @@ It supports safe re-runs, it means that if you can run it for an already bumped 
     user: ''
 
     # Commit message that will be used in the bump commit
-    # (Optional) Default: ⬆️ bumped to {{version}}
+    # (Optional) Default: ⬆️ bump everywhere to {{version}}
     commit-message: ''
 
     # Personal access token (PAT) used to clone & push to the repository.
