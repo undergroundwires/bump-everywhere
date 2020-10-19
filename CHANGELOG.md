@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.0 (2020-10-17)
+
+* add option to customize commit message | [commit](https://github.com/undergroundwires/bump-everywhere/commit/b0a6c02efe1ba921e5bec67bb9c4e053f864757f)
+* update alpine version to latest 3.12 | [commit](https://github.com/undergroundwires/bump-everywhere/commit/c05cb80c69104f6d5f6c04a6974d4636123600d4)
+* change default commit message to "bump everywhere to" | [commit](https://github.com/undergroundwires/bump-everywhere/commit/bb1bfc83bce12fae5c0d6e4ac5353f45ea63fe13)
+* update dependencies to latest | [commit](https://github.com/undergroundwires/bump-everywhere/commit/20c6f64ef27adf726ef55811a602187ee8edf8d2)
+
+[compare](https://github.com/undergroundwires/bump-everywhere/compare/1.1.2...1.2.0)
+
 ## 1.1.2 (2020-07-25)
 
 * simplified ci-cd | [commit](https://github.com/undergroundwires/bump-everywhere/commit/85becb775118787291815d40df8e603336c03033)
