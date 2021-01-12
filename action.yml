@@ -29,12 +29,12 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.repository }}
-    - ${{ inputs.user }}
-    - ${{ inputs.git-token }}
-    - ${{ inputs.release-type }}
-    - ${{ inputs.release-token }}
-    - ${{ inputs.commit-message }}
+    - --repository ${{ inputs.repository }}
+    - --user ${{ inputs.user }}
+    - --git-token ${{ inputs.git-token }}
+    - --release-type ${{ inputs.release-type }}
+    - --release-token ${{ inputs.release-token }}
+    - --commit-message ${{ inputs.commit-message }}
 branding:
   icon: 'arrow-up'  
   color: 'yellow'

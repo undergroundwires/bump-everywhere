@@ -64,20 +64,7 @@ It supports safe re-runs, it means that if you can run it for an already bumped 
 
 [↑](#bump-everywhere)
 
-### Option 2. Use `npm`
-
-With installation:
-
-```sh
-npm install -g bump-everywhere # or "npm install bump-everywhere --save-dev" for local installations
-bump-everywhere --repository "undergroundwires/privacy.sexy" --user "bot-commiter-name" --git-token "PAT_TOKEN" --relase-type "release" --release-token "PAT_TOKEN" --commit-message "⬆️ Bump everywhere"
-```
-
-Or without installation you can directly run it using `npx bump-everywhere <parameters...>`
-
-[↑](#bump-everywhere)
-
-### Option 3. Use Docker
+### Option 2. Use Docker
 
 - To get the image you can either:
   - Pull from docker hub using `docker pull undergroundwires/bump-everywhere:latest`
@@ -86,13 +73,22 @@ Or without installation you can directly run it using `npx bump-everywhere <para
 
   ```sh
     docker run undergroundwires/bump-everywhere \
-      "undergroundwires/privacy.sexy" \
-      "bot-user" \
-      "GitHub PAT for pushes" \
-      "prerelase" \
-      "GitHub PAT for releases" \
-      "⬆️ bump to {{version}}"
+      --repository "undergroundwires/privacy.sexy" \
+      --user "bot-user" \
+      --git-token "GitHub PAT for pushes" \
+      --relase-type "prerelase" \
+      --release-token "GitHub PAT for releases" \
+      --commit-message "⬆️ bump to {{version}}"
   ```
+
+[↑](#bump-everywhere)
+
+### Option 3. Use `npm`
+
+1. (Optionally) install globally: `npm install -g bump-everywhere`
+   - or locally: `npm install bump-every-where --save-dev`
+2. Run `npx bump-everywhere <parameters...>`
+   - See [docker example](#option-2-use-docker) for parameter usage
 
 [↑](#bump-everywhere)
 
@@ -102,17 +98,8 @@ Or without installation you can directly run it using `npx bump-everywhere <para
    - run e.g. `apk add bash git curl jq`
 2. Clone this repository: `git clone https://github.com/undergroundwires/bump-everywhere`
    - or optionally add this repository as git submodule: `git submodule add https://github.com/undergroundwires/bump-everywhere`
-3. Call the script as following :
-
-   ```sh
-     bash "scripts/bump-everywhere.sh" \
-         --repository "undergroundwires/privacy.sexy" \
-         --user "bot-commiter-name" \
-         --git-token "PAT_TOKEN" \
-         --release-type "draft" \
-         --release-token "PAT_TOKEN" \
-         --commit-message "⬆️ bump to {{version}}"
-   ```
+3. Call the script: `bash "scripts/bump-everywhere.sh" <parameters>`
+   - See [docker example](#option-2-use-docker) for parameter usage
 
 [↑](#bump-everywhere)
 
