@@ -95,7 +95,8 @@ It supports safe re-runs, it means that if you can run it for an already bumped 
 ### Option 4. Use scripts
 
 1. Ensure `bash` (4 or newer), `git`, `curl`, `jq` exists in your environment
-   - run e.g. `apk add bash git curl jq`
+   - On Alpine: `apk add bash git curl jq`
+   - On Windows: `choco install git curl jq` and use Git Bash
 2. Clone this repository: `git clone https://github.com/undergroundwires/bump-everywhere`
    - or optionally add this repository as git submodule: `git submodule add https://github.com/undergroundwires/bump-everywhere`
 3. Call the script: `bash "scripts/bump-everywhere.sh" <parameters>`
@@ -135,11 +136,7 @@ You can also use following scripts individually (check script files for usage, p
 - [ez-consent](https://github.com/undergroundwires/ez-consent#gitops)
 - [aws-static-site-with-cd](https://github.com/undergroundwires/aws-static-site-with-cd)
 
-## GitOps
-
-CI/CD is fully automated for this repo using different GIT events & GitHub actions.
-
-[![GitOps flow](./img/gitops.png)](./.github/workflows)
+[↑](#bump-everywhere)
 
 ## Support
 
@@ -150,5 +147,20 @@ CI/CD is fully automated for this repo using different GIT events & GitHub actio
 ```markdown
 [![Auto-versioned by bump-everywhere](https://github.com/undergroundwires/bump-everywhere/blob/master/badge.svg?raw=true)](https://github.com/undergroundwires/bump-everywhere)
 ```
+
+[↑](#bump-everywhere)
+
+## Tests
+
+- **Automated tests**: Run `.test.sh` files in [`./tests`](./tests/)
+- **Manual tests**: See documentation in [docker-entrypoint](./tests/docker-entrypoint)
+
+[↑](#bump-everywhere)
+
+## GitOps
+
+CI/CD is fully automated for this repo using different GIT events and GitHub actions.
+
+[![GitOps flow](./img/gitops.png)](./.github/workflows)
 
 [↑](#bump-everywhere)

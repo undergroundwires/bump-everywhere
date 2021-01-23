@@ -14,3 +14,14 @@ jobs:
       -
         name: Build docker
         run: docker build . --tag bump-everywhere
+
+  run-tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - 
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: bump-npm-version
+        run: bash ./tests/bump-npm-version.test.sh

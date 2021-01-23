@@ -108,15 +108,11 @@ create_changelog() {
 }
 
 update_npm() {
-  local -r file_name="package.json"
-  if ! file_exists "$file_name"; then
-    return 0
-  fi
   echo "Updating npm version"
   bash "$SCRIPTS_DIRECTORY/bump-npm-version.sh" \
     || { echo "Could not bump npm version"; exit 1; }
-  git add "$file_name" \
-    || { echo "git add failed for $file_name"; exit 1; }
+  git add . \
+    || { echo "git add failed"; exit 1; }
 }
 
 has_uncommited_changes() {
