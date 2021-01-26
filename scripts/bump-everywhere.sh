@@ -125,7 +125,7 @@ has_uncommited_changes() {
 }
 
 commit_and_push() {
-  local -r latest_version_tag="$1" -r commit_message="$2"
+  local -r latest_version_tag="$1" commit_message="$2"
   if has_uncommited_changes; then
     echo "No uncommited changes"
   else
@@ -139,7 +139,7 @@ commit_and_push() {
 }
 
 create_release() {
-  local -r repository="$1" -r release_token="$2" -r release_type="$3"
+  local -r repository="$1" release_token="$2" release_type="$3"
   bash "$SCRIPTS_DIRECTORY/create-github-release.sh" \
       --repository "$repository" \
       --token "$release_token" \
