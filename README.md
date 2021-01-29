@@ -76,7 +76,7 @@ It supports safe re-runs, it means that if you can run it for an already bumped 
       --repository "undergroundwires/privacy.sexy" \
       --user "bot-user" \
       --git-token "GitHub PAT for pushes" \
-      --relase-type "prerelase" \
+      --release-type "prerelease" \
       --release-token "GitHub PAT for releases" \
       --commit-message "⬆️ bump to {{version}}"
   ```
