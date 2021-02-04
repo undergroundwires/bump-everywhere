@@ -108,9 +108,9 @@ It supports safe re-runs, it means that if you can run it for an already bumped 
 
 - You manually tag your last commit to update major & minor versions.
 - E.g.
-  - `git commit -m "bumped version to 1.2.0" --allow-empty`
-  - `git tag 1.2.0`
-  - `git push && git push origin 1.2.0`
+  - `git commit -m "bumped version to 1.3.0" --allow-empty`
+  - `git tag 1.3.0`
+  - `git push && git push origin 1.3.0`
 
 [↑](#bump-everywhere)
 
