@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.1 (2021-12-21)
+
+* bump dependencies to latest | [51e11bf](https://github.com/undergroundwires/bump-everywhere/commit/51e11bf7dd8ff7428acf122206be034475d7ba77)
+* Fix patch number increase #13 | [1bdaeef](https://github.com/undergroundwires/bump-everywhere/commit/1bdaeef49eee032d1948c6fd57ca6372bafbc817)
+
+[compare](https://github.com/undergroundwires/bump-everywhere/compare/1.3.0...1.3.1)
+
 ## 1.3.0 (2021-01-29)
 
 * update dependencies to latest #7 | [2590747](https://github.com/undergroundwires/bump-everywhere/commit/25907479d737d944b1ae1602b53aa77f9938961b)
