@@ -32,12 +32,11 @@ tag_and_push() {
 
 increase_patch_version() {
     local -r version="$1"
-    local -r version_bits=("${version//./ }") # Replace . with space so can split into an array
-    local -r major=${version_bits[0]}
-    local -r minor=${version_bits[1]}
-    local patch=${version_bits[2]}
-    patch=$((patch+1))
-    printf "%s.%s.%s" "$major" "$minor" "$patch"
+    local IFS='.'                           # Use "local" so we do not potentially break other scripts
+    read -ra version_parts <<< "$version"   # Split to (-a:) array without (-r:) allowing backslashes to escape
+    ((version_parts[2]++))                  # Increase patch version (after second dot; major.minor.<patch>)
+    new_version="${version_parts[*]}"       # Join parts back using same IFS
+    echo "$new_version"
 }
 
 is_latest_commit_tagged() {

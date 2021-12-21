@@ -152,7 +152,9 @@ You can also use following scripts individually (check script files for usage, p
 
 ## Tests
 
-- **Automated tests**: Run `.test.sh` files in [`./tests`](./tests/)
+- **Automated tests**
+  - Test all: `bash ./tests/run.sh`
+  - Defined as `.test.sh` files in [`./tests`](./tests/)
 - **Manual tests**: See documentation in [docker-entrypoint](./tests/docker-entrypoint)
 
 [↑](#bump-everywhere)

@@ -1,20 +1,23 @@
 #!/usr/bin/env bash
 
+# Import dependencies 
+readonly SELF_DIRECTORY=$(dirname "$0")
+# shellcheck source=tests/test-utilities.sh
+source "$SELF_DIRECTORY/test-utilities.sh"
+
 test() {
     # arrange
-    local -r git_dir="$1"
     local sut
     local -r initial_version='0.1.0'
     local -r new_version='0.2.10'
     local -r expected_package_content=$(print_package_json "$new_version")
     local -r expected_package_lock_content=$(print_package_lock_json "$new_version")
-    sut=$(get_absolute_sut_path) || { echo '😢 Could not locate sut'; return 1; }
+    sut=$(get_absolute_sut_path "bump-npm-version.sh") || { echo '😢 Could not locate sut'; return 1; }
     echo "Sut: $sut"
-    cd "$git_dir" || { echo "Cannot navigate to temp dir: \"$git_dir\""; return 1; }
     setup_git_env "$initial_version" "$new_version" || { echo "Could not setup the test environment"; return 1; }
 
     # act
-    echo "Setup repository in \"$git_dir\""
+    echo "Setup repository"
     if ! bash "$sut"; then
         echo "Unexpected exit code: $?";
         return 1;
@@ -49,34 +52,7 @@ setup_git_env() {
 }
 
 main() {
-    # begin
-    local -r temp_dir=$(mktemp -d 2>/dev/null || mktemp -d -t 'bumpeverywheretmpdir')
-    echo "Test dir: \"$temp_dir\""
-
-    # test
-    test "$temp_dir"
-    local -i -r test_exit_code="$?"
-    echo "Test exit code: $test_exit_code"
-
-    # cleanup
-    rm -rf "$temp_dir"
-    echo "Cleaned \"$temp_dir\""
-    exit "$test_exit_code"
-}
-
-get_absolute_sut_path() 
-{
-    local -r current_dir="$(pwd)"
-    local -r relative_script_dir=$(dirname "$0")
-    local -r absolute_script_dir="$current_dir/$relative_script_dir"
-    local -r script_dir="$absolute_script_dir/../scripts"
-    local normalized
-    if ! normalized=$(cd "${script_dir}" || return 1;pwd; return 0); then
-        echo "Dir does not exist: ${script_dir}"
-        return 1
-    fi
-    local -r script_path="$normalized/bump-npm-version.sh"
-    echo "$script_path"
+    run_test test
 }
 
 print_package_json() {
