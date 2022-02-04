@@ -25,7 +25,7 @@ print_title() {
   local -r tag="$1"
   local tag_date
   if ! tag_date=$(git log -1 --pretty=format:'%ad' --date=short "$tag") \
-    || is_empty_or_null "$tag_date"; then
+    || utilities::is_empty_or_null "$tag_date"; then
     echo "Cannot get tag date for $tag"
     exit 1
   fi
@@ -85,20 +85,20 @@ print_first_tag() {
   local -r repository="$1"
   local first_tag
   if ! first_tag=$(print_first_version) \
-    || is_empty_or_null "$first_tag"; then
+    || utilities::is_empty_or_null "$first_tag"; then
     echo "Cannot get the first tag"
     exit 1
   fi
   print_title "$first_tag"
   local first_commit_with_tag_sha
   if ! first_commit_with_tag_sha=$(print_commit_sha_of_tag "$first_tag") \
-    || is_empty_or_null "$first_commit_with_tag_sha"; then
+    || utilities::is_empty_or_null "$first_commit_with_tag_sha"; then
     echo "Cannot get first commit with tag: $first_tag"
     exit 1
   fi
   local initial_commit_sha
   if ! initial_commit_sha=$(print_initial_commit_sha) \
-    || is_empty_or_null "$initial_commit_sha"; then
+    || utilities::is_empty_or_null "$initial_commit_sha"; then
     echo "Cannot get initial commit";
     exit 1;
   fi
@@ -115,7 +115,7 @@ print_first_tag() {
     echo "$LOG_COMMITS_SCRIPT_PATH has failed"
     exit 1;
   fi
-  if ! is_empty_or_null "$changes"; then
+  if ! utilities::is_empty_or_null "$changes"; then
     printf "%s\n" "$changes"
   fi
   printf "[compare](https://github.com/%s/compare/%s...%s)" \
@@ -124,7 +124,7 @@ print_first_tag() {
 
 main() {
   local -r repository="$1"
-  if is_empty_or_null "$repository"; then echo "Repository name is not set."; exit 1; fi;
+  if utilities::is_empty_or_null "$repository"; then echo "Repository name is not set."; exit 1; fi;
   printf "# Changelog\n"
   print_tags_except_first "$repository"
   print_first_tag "$repository"

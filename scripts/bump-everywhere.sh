@@ -36,7 +36,7 @@ clone () {
   echo "Cloning $repository"
   local temp_directory
   if ! temp_directory=$(mktemp -d) \
-    || is_empty_or_null "$temp_directory"; then
+    || utilities::is_empty_or_null "$temp_directory"; then
     echo "Could not create a temporary directory"
     exit 1;
   fi
@@ -46,7 +46,7 @@ clone () {
     || { echo "Could not locate folder $temp_directory"; exit 1; }
   local latest_commit_sha
   if ! latest_commit_sha=$(git log -1 --format="%H") \
-     || is_empty_or_null "$latest_commit_sha"; then
+     || utilities::is_empty_or_null "$latest_commit_sha"; then
     echo "Could not retrieve latest commit sha"
     exit 1
   fi
@@ -95,7 +95,7 @@ create_changelog() {
   local -r repository="$1"
   local logs
   if ! logs=$(bash "$SCRIPTS_DIRECTORY/print-changelog.sh" --repository "$repository") \
-    || is_empty_or_null "$logs"; then
+    || utilities::is_empty_or_null "$logs"; then
     printf "print-changelog.sh has failed\n%s" "$logs"
     exit 1;
   fi
@@ -121,7 +121,7 @@ has_uncommited_changes() {
     echo "git status has failed";
     exit 1;
   fi
-  if is_empty_or_null "$status"; then return 0; else return 1; fi
+  if utilities::is_empty_or_null "$status"; then return 0; else return 1; fi
 }
 
 commit_and_push() {
@@ -149,12 +149,12 @@ create_release() {
 
 validate_parameters() {
   local -r repository="$1" git_user="$2" git_token="$3" release_type="$4" release_token="$5" commit_message="$6"
-  if is_empty_or_null "$repository"; then echo "Repository name is not set."; exit 1; fi;
-  if is_empty_or_null "$git_user"; then echo "Git user is not set."; exit 1; fi;
-  if is_empty_or_null "$git_token"; then echo "Git access token is not set."; exit 1; fi;
-  if is_empty_or_null "$release_type"; then echo "Release type is not set."; exit 1; fi;
-  if is_empty_or_null "$release_token"; then echo "Release access token is not set."; exit 1; fi;
-  if is_empty_or_null "$commit_message"; then echo "Commit message is not set."; exit 1; fi;
+  if utilities::is_empty_or_null "$repository"; then echo "Repository name is not set."; exit 1; fi;
+  if utilities::is_empty_or_null "$git_user"; then echo "Git user is not set."; exit 1; fi;
+  if utilities::is_empty_or_null "$git_token"; then echo "Git access token is not set."; exit 1; fi;
+  if utilities::is_empty_or_null "$release_type"; then echo "Release type is not set."; exit 1; fi;
+  if utilities::is_empty_or_null "$release_token"; then echo "Release access token is not set."; exit 1; fi;
+  if utilities::is_empty_or_null "$commit_message"; then echo "Commit message is not set."; exit 1; fi;
 }
 
 main() {
@@ -170,7 +170,7 @@ main() {
     update_readme
     create_changelog "$repository"
     local version_tag
-    if ! version_tag="$(print_latest_version)"; then
+    if ! version_tag="$(utilities::print_latest_version)"; then
       echo "Could not retrieve latest version. $version_tag"
       exit 1
     fi

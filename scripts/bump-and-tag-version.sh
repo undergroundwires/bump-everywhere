@@ -42,7 +42,7 @@ increase_patch_version() {
 is_latest_commit_tagged() {
     local latest_commit
     if ! latest_commit=$(git rev-parse HEAD) \
-        || ! has_value "$latest_commit"; then
+        || ! utilities::has_value "$latest_commit"; then
         echo "Could not read latest commit"
         exit 1
     fi
@@ -51,10 +51,10 @@ is_latest_commit_tagged() {
         echo "Could not check the tags of the commit $latest_commit"
         exit 1
     fi
-    if ! has_value "$tag_of_latest_commit"; then
+    if ! utilities::has_value "$tag_of_latest_commit"; then
         return 1;
     fi
-    if ! is_valid_semantic_version_string "$tag_of_latest_commit"; then
+    if ! utilities::is_valid_semantic_version_string "$tag_of_latest_commit"; then
         echo "Latest commit tag \"$tag_of_latest_commit\" in commit \"$latest_commit\" is not a version string"
         exit 1
     fi
@@ -62,7 +62,7 @@ is_latest_commit_tagged() {
 }
 
 main() {
-    if ! repository_has_any_tags; then
+    if ! utilities::repository_has_any_tags; then
         echo "No tag is present in the repository."
         tag_and_push "$DEFAULT_VERSION"
         exit 0
@@ -72,13 +72,13 @@ main() {
         exit 0
     fi
     local last_version
-    if ! last_version=$(print_latest_version); then
+    if ! last_version=$(utilities::print_latest_version); then
         echo "Could not retrieve latest version. $last_version"
         exit 1
     fi
     local new_version
     if ! new_version=$(increase_patch_version "$last_version") \
-        || is_empty_or_null "$new_version"; then
+        || utilities::is_empty_or_null "$new_version"; then
         echo "Could not increase the version"
         exit 1
     fi

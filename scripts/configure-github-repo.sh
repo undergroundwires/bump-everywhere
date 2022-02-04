@@ -36,9 +36,9 @@ set_user() {
 
 validate_parameters() {
   local -r repository="$1" access_token="$2" git_user="$3"
-  if is_empty_or_null "$repository"; then echo "Repository name is not set."; exit 1; fi;
-  if is_empty_or_null "$access_token"; then echo "Access token is not set."; exit 1; fi;
-  if is_empty_or_null "$git_user"; then echo "Git user is not set."; exit 1; fi;
+  if utilities::is_empty_or_null "$repository"; then echo "Repository name is not set."; exit 1; fi;
+  if utilities::is_empty_or_null "$access_token"; then echo "Access token is not set."; exit 1; fi;
+  if utilities::is_empty_or_null "$git_user"; then echo "Git user is not set."; exit 1; fi;
 }
 
 main() {

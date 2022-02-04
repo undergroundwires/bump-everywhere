@@ -20,12 +20,12 @@ while [[ "$#" -gt 0 ]]; do case $1 in
   *) echo "Unknown parameter passed: $1"; exit 1;;
 esac; shift; done
 
-is_empty_or_null() { local -r text="$1"; [[ -z "$text" ]]; }
+utilities::is_empty_or_null() { local -r text="$1"; [[ -z "$text" ]]; }
 
 # Validate parameters
-if is_empty_or_null "$CURRENT"; then echo "Current tag is missing"; exit 1; fi;
-if is_empty_or_null "$PREVIOUS"; then echo "Previous tag is missing"; exit 1; fi;
-if is_empty_or_null "$REPOSITORY"; then echo "Repository is missing"; exit 1; fi;
+if utilities::is_empty_or_null "$CURRENT"; then echo "Current tag is missing"; exit 1; fi;
+if utilities::is_empty_or_null "$PREVIOUS"; then echo "Previous tag is missing"; exit 1; fi;
+if utilities::is_empty_or_null "$REPOSITORY"; then echo "Repository is missing"; exit 1; fi;
 
 escape_regex() {
   local -r text="$1"

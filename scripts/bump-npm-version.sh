@@ -39,14 +39,14 @@ bump_npm_package_version() {
 
 main() {
   local new_version
-  if ! new_version=$(print_latest_version); then
+  if ! new_version=$(utilities::print_latest_version); then
       echo "Could not retrieve the new version. $new_version"
       exit 1;
   fi
   local -r -a file_names=('package.json' 'package-lock.json')
   for file_name in "${file_names[@]}"
   do
-    if ! file_exists "$file_name"; then
+    if ! utilities::file_exists "$file_name"; then
       echo "Skipping.. No $file_name file exists."
       continue
     fi

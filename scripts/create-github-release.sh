@@ -52,12 +52,12 @@ release_exists() {
 
 print_release_notes() {
     local -r version="$1" repository="$2"
-    if has_single_version; then 
+    if utilities::has_single_version; then 
         echo "Initial release"
         return 0
     fi
     local version_before
-    if ! version_before=$(print_previous_version); then
+    if ! version_before=$(utilities::print_previous_version); then
         echo "Could not get the previous version. $version_before"
         exit 1
     fi
@@ -69,7 +69,7 @@ print_release_notes() {
         echo "$LOG_COMMITS_SCRIPT_PATH has failed"
         exit 1;
     fi
-    if ! is_empty_or_null "$changes"; then
+    if ! utilities::is_empty_or_null "$changes"; then
         printf "%s\n\n" "$changes"
     fi
     printf "[compare](https://github.com/%s/compare/%s...%s)" \
@@ -105,15 +105,15 @@ create_release() {
         --fail
 }
 
-is_release_type_draft()         { equals_case_insensitive "$1" "draft"; }
-is_release_type_none()          { equals_case_insensitive "$1" "none"; }
-is_release_type_prerelease()    { equals_case_insensitive "$1" "prerelease"; }
-is_release_type_release()       { equals_case_insensitive "$1" "release"; }
+is_release_type_draft()         { utilities::equals_case_insensitive "$1" "draft"; }
+is_release_type_none()          { utilities::equals_case_insensitive "$1" "none"; }
+is_release_type_prerelease()    { utilities::equals_case_insensitive "$1" "prerelease"; }
+is_release_type_release()       { utilities::equals_case_insensitive "$1" "release"; }
 
 validate_parameters() {
     local repository="$1" access_token="$2" release_type="$3"
-    if is_empty_or_null "$repository"; then echo "Repository name is not set."; exit 1; fi;
-    if is_empty_or_null "$release_type"; then echo "Release type is not set."; exit 1; fi;
+    if utilities::is_empty_or_null "$repository"; then echo "Repository name is not set."; exit 1; fi;
+    if utilities::is_empty_or_null "$release_type"; then echo "Release type is not set."; exit 1; fi;
     if ! (is_release_type_draft "$release_type" \
         || is_release_type_none "$release_type" \
         || is_release_type_prerelease "$release_type" \
@@ -122,7 +122,7 @@ validate_parameters() {
         exit 1;
     fi;
     if (! is_release_type_none "$release_type") \
-       && is_empty_or_null "$access_token"; then
+       && utilities::is_empty_or_null "$access_token"; then
       echo "Access token is not set.";
       exit 1;
     fi;
@@ -136,7 +136,7 @@ main() {
         exit 0;
     fi;
     local latest_version
-    if ! latest_version=$(print_latest_version); then
+    if ! latest_version=$(utilities::print_latest_version); then
         echo "Could not get the latest version. $latest_version"
         exit 1;
     fi
