@@ -140,9 +140,11 @@ You can also use following scripts individually (check script files for usage, p
 
 ## Support
 
-- Give it a star ⭐
-- Feel free to use the badge in the `README.md` of repository where you use bump-everywhere:
-  - (it'll look like: [![Auto-versioned by bump-everywhere](https://github.com/undergroundwires/bump-everywhere/blob/master/badge.svg?raw=true)](https://github.com/undergroundwires/bump-everywhere))
+**Sponsor 💕**. Consider one time or recurring donation on [GitHub Sponsors](https://github.com/sponsors/undergroundwires) or [any other way (undrgroundwires.dev/donate)](https://undergroundwires.dev/donate), every penny you leave will help development and maintainance of the project .
+
+**Star 🤩**. If you do cannot do that you can just give it a star ⭐ . It helps me to see that the project is appreciated.
+
+**Badge 📛**. If you use the project, feel free to use the badge in the `README.md` of repository where you use bump-everywhere so we can have larger community that can help improving the project. It would look like [![Auto-versioned by bump-everywhere](https://github.com/undergroundwires/bump-everywhere/blob/master/badge.svg?raw=true)](https://github.com/undergroundwires/bump-everywhere)). You can add following in your markdown file:
 
 ```markdown
 [![Auto-versioned by bump-everywhere](https://github.com/undergroundwires/bump-everywhere/blob/master/badge.svg?raw=true)](https://github.com/undergroundwires/bump-everywhere)
