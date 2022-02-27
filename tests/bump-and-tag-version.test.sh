@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-# Import dependencies 
+# Import dependencies
 readonly SELF_DIRECTORY=$(dirname "$0")
-# shellcheck source=tests/test-utilities.sh
+# shellcheck source=test-utilities.sh
 source "$SELF_DIRECTORY/test-utilities.sh"
 
 main() {

@@ -20,7 +20,7 @@ readonly SCRIPTS_DIRECTORY=$(dirname "$0")
 readonly VERSION_PLACEHOLDER="{{version}}"
 
 # Import dependencies
-# shellcheck source=scripts/shared/utilities.sh
+# shellcheck source=shared/utilities.sh
 source "$SCRIPTS_DIRECTORY/shared/utilities.sh"
 
 print_name() {
@@ -162,7 +162,7 @@ main() {
   validate_parameters "$repository" "$git_user" "$git_token" "$release_type" "$release_token" "$commit_message"
   print_name
   clone "$repository" "$git_token"
-  if is_rerun "$commit_message"; then 
+  if is_rerun "$commit_message"; then
     echo "It's a re-run of the script, versioning will be skipped";
   else
     configure_credentials "$repository" "$git_token" "$git_user"

@@ -16,7 +16,7 @@ jobs:
         run: sudo apt-get update -y && sudo apt-get install -y shellcheck
       -
         name: Lint shell scripts
-        run: find . -name "*.sh" | xargs shellcheck --external-sources
+        run: find . -name "*.sh" | xargs shellcheck --external-sources --source-path=SCRIPTDIR
   
   lint:
     name: Validate markdown & yaml files

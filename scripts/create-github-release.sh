@@ -18,7 +18,7 @@ readonly SCRIPTS_DIRECTORY=$(dirname "$0")
 readonly LOG_COMMITS_SCRIPT_PATH="$SCRIPTS_DIRECTORY/shared/log-commits.sh"
 
 # Import dependencies
-# shellcheck source=scripts/shared/utilities.sh
+# shellcheck source=shared/utilities.sh
 source "$SCRIPTS_DIRECTORY/shared/utilities.sh"
 
 release_exists() {
@@ -52,7 +52,7 @@ release_exists() {
 
 print_release_notes() {
     local -r version="$1" repository="$2"
-    if utilities::has_single_version; then 
+    if utilities::has_single_version; then
         echo "Initial release"
         return 0
     fi

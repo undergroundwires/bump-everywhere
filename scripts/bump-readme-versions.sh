@@ -14,7 +14,7 @@
 readonly SCRIPTS_DIRECTORY=$(dirname "$0")
 
 # Import dependencies
-# shellcheck source=scripts/shared/utilities.sh
+# shellcheck source=shared/utilities.sh
 source "$SCRIPTS_DIRECTORY/shared/utilities.sh"
 
 search_and_replace() {
@@ -38,7 +38,7 @@ file_content_contains() {
 }
 
 main() {
-  if utilities::has_single_version; then 
+  if utilities::has_single_version; then
       echo "Skipping.. There were no versions before."
       return 0
   fi

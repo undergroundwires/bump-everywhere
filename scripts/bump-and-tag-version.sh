@@ -17,7 +17,7 @@ readonly SCRIPTS_DIRECTORY=$(dirname "$0")
 readonly DEFAULT_VERSION="0.1.0"
 
 # Import dependencies
-# shellcheck source=scripts/shared/utilities.sh
+# shellcheck source=shared/utilities.sh
 source "$SCRIPTS_DIRECTORY/shared/utilities.sh"
 
 tag_and_push() {
