@@ -12,6 +12,13 @@
 # Dependencies:
 #   - External: git
 
+# Globals
+readonly SCRIPT_DIRECTORY=$(dirname "$0")
+
+# Import dependencies
+# shellcheck source=utilities.sh
+source "$SCRIPT_DIRECTORY/utilities.sh"
+
 # Parse parameters
 while [[ "$#" -gt 0 ]]; do case $1 in
   --current) CURRENT="$2"; shift;;
@@ -19,8 +26,6 @@ while [[ "$#" -gt 0 ]]; do case $1 in
   --repository) REPOSITORY="$2"; shift;;
   *) echo "Unknown parameter passed: $1"; exit 1;;
 esac; shift; done
-
-utilities::is_empty_or_null() { local -r text="$1"; [[ -z "$text" ]]; }
 
 # Validate parameters
 if utilities::is_empty_or_null "$CURRENT"; then echo "Current tag is missing"; exit 1; fi;
