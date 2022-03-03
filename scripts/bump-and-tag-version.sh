@@ -21,13 +21,13 @@ readonly DEFAULT_VERSION="0.1.0"
 source "$SCRIPTS_DIRECTORY/shared/utilities.sh"
 
 tag_and_push() {
-    local -r tag="$1"
-    echo "Creating tag: \"$tag\""
-    git tag "$tag" \
-        || { echo "Could not tag: \"$tag\"" ; exit 1; }
-    git push -u origin master "$tag" \
-        || { echo "Could not push the tag: \"$tag\""; exit 1; }
-    echo "Tag created and pushed: \"$tag\""
+  local -r tag="$1"
+  echo "Creating tag: \"$tag\""
+  git tag "$tag" \
+      || { echo "Could not tag: \"$tag\"" ; exit 1; }
+  git push -u origin "$tag" \
+      || { echo "Could not push the tag: \"$tag\""; exit 1; }
+  echo "Tag created and pushed: \"$tag\""
 }
 
 increase_patch_version() {

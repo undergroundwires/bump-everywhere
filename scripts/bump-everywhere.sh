@@ -133,7 +133,7 @@ commit_and_push() {
     local -r printable_commit_message=${commit_message/$VERSION_PLACEHOLDER/$latest_version_tag}
     git commit -m "$printable_commit_message" \
       || { echo "Could not commit wit the message: $printable_commit_message"; exit 1; }
-    git push -u origin master \
+    git push -u origin \
       || { echo "Could not git push changes"; exit 1; }
   fi
 }

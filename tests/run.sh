@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
+# Import dependencies
 readonly SELF_DIRECTORY=$(dirname "$0")
-
+# shellcheck source=test-utilities.sh
+source "$SELF_DIRECTORY/test-utilities.sh"
 
 main() {
     local succeeded_tests=()
@@ -21,8 +23,7 @@ main() {
             failed_tests+=("$file")
             echo $'\t'"🔴 Failed."
         fi
-        # shellcheck disable=SC2001
-        echo "$output" | sed 's/^/\t/' # Tab indent output
+        echo "$output" | test_utilities::tab_indent_to_right
     done
 
     # Report

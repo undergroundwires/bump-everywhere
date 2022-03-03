@@ -152,15 +152,6 @@ You can also use following scripts individually (check script files for usage, p
 
 [↑](#bump-everywhere)
 
-## Tests
-
-- **Automated tests**
-  - Test all: `bash ./tests/run.sh`
-  - Defined as `.test.sh` files in [`./tests`](./tests/)
-- **Manual tests**: See documentation in [docker-entrypoint](./tests/docker-entrypoint)
-
-[↑](#bump-everywhere)
-
 ## GitOps
 
 CI/CD is fully automated for this repo using different GIT events and GitHub actions.

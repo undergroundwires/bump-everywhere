@@ -14,6 +14,15 @@ You can contribute by:
 
 If you're using visual studio code, [recommended extensions](./.vscode/extensions.json) would install useful linters and extensions.
 
+## Tests
+
+**Automated tests**:
+
+- Test all: `bash ./tests/run.sh`.
+- Defined as `.test.sh` files in [`./tests`](./tests/).
+
+- **Manual tests**: See documentation in [docker-entrypoint](./tests/docker-entrypoint)
+
 ## Style guide
 
 - Do not introduce any TODO comments, fix them or do not introduce the change.
