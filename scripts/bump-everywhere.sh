@@ -3,10 +3,13 @@
 # Bumps version, creates changelog and creates a release
 # Example usage:
 #   bash "scripts/bump-everywhere.sh" \
-#      --repository "undergroundwires/privacy.sexy" \
-#      --user "bot-commiter-name" \
-#      --git-token "PAT_TOKEN" \
-#      --release-token "PAT_TOKEN"
+#      --repository 'undergroundwires/privacy.sexy' \
+#      --user 'bot-commiter-name' \
+#      --git-token 'PAT_TOKEN' \
+#      --release-token 'PAT_TOKEN' \
+#      --release-type 'prerelease' \
+#      --commit-message '⬆️ bump to {{version}}' \
+#      --branch 'master' # <- Optional parameter
 # Prerequisites:
 #   - Ensure git is installed
 #   - Ensure you have curl and jq installed e.g. with apk add curl jq git
@@ -32,24 +35,37 @@ print_name() {
 }
 
 clone () {
-  local -r repository="$1" git_token="$2"
+  local -r repository="$1" git_token="$2" branch="$3"
   echo "Cloning $repository"
+
   local temp_directory
   if ! temp_directory=$(mktemp -d) \
     || utilities::is_empty_or_null "$temp_directory"; then
     echo "Could not create a temporary directory"
     exit 1;
   fi
+
   git clone "https://x-access-token:$git_token@github.com/$repository.git" "$temp_directory" \
     || { echo "git clone failed for $repository"; exit 1; }
   cd "$temp_directory" \
     || { echo "Could not locate folder $temp_directory"; exit 1; }
+
+  if utilities::has_value "$branch"; then
+    if [[ $(git branch --show-current) != "$branch" ]]; then
+      git switch "$branch" || {
+        >&2 echo "❌ Could not switch to specified branch: \"$branch\"."
+        exit 1
+      }
+    fi
+  fi
+
   local latest_commit_sha
   if ! latest_commit_sha=$(git log -1 --format="%H") \
      || utilities::is_empty_or_null "$latest_commit_sha"; then
     echo "Could not retrieve latest commit sha"
     exit 1
   fi
+
   echo "Latest commit sha: $latest_commit_sha"
 }
 
@@ -148,20 +164,24 @@ create_release() {
 }
 
 validate_parameters() {
-  local -r repository="$1" git_user="$2" git_token="$3" release_type="$4" release_token="$5" commit_message="$6"
+  local -r repository="$1" git_user="$2" git_token="$3" release_type="$4" release_token="$5" commit_message="$6" branch="$7"
   if utilities::is_empty_or_null "$repository"; then echo "Repository name is not set."; exit 1; fi;
   if utilities::is_empty_or_null "$git_user"; then echo "Git user is not set."; exit 1; fi;
   if utilities::is_empty_or_null "$git_token"; then echo "Git access token is not set."; exit 1; fi;
   if utilities::is_empty_or_null "$release_type"; then echo "Release type is not set."; exit 1; fi;
   if utilities::is_empty_or_null "$release_token"; then echo "Release access token is not set."; exit 1; fi;
   if utilities::is_empty_or_null "$commit_message"; then echo "Commit message is not set."; exit 1; fi;
+  if utilities::has_value "$branch" && ! is_valid_branch_name "$branch"; then
+    >&2 echo "❌ \"$branch\" is not a valid branch name."
+    exit 1
+  fi
 }
 
 main() {
-  local -r repository="$1" git_user="$2" git_token="$3" release_type="$4" release_token="$5" commit_message="$6"
-  validate_parameters "$repository" "$git_user" "$git_token" "$release_type" "$release_token" "$commit_message"
+  local -r repository="$1" git_user="$2" git_token="$3" release_type="$4" release_token="$5" commit_message="$6" branch="$7"
+  validate_parameters "$repository" "$git_user" "$git_token" "$release_type" "$release_token" "$commit_message" "$branch"
   print_name
-  clone "$repository" "$git_token"
+  clone "$repository" "$git_token" "$branch"
   if is_rerun "$commit_message"; then
     echo "It's a re-run of the script, versioning will be skipped";
   else
@@ -175,9 +195,18 @@ main() {
       exit 1
     fi
     update_npm
-    commit_and_push "$version_tag" "$commit_message"
+    commit_and_push "$version_tag" "$commit_message" "$branch"
   fi
   create_release "$repository" "$release_token" "$release_type"
+}
+
+is_valid_branch_name() {
+  local -r branch_name="$1"
+  if git check-ref-format --branch "$branch_name" 2>/dev/null; then
+    return 0
+  else
+    return 1
+  fi
 }
 
 # Parse parameters
@@ -188,7 +217,8 @@ while [[ "$#" -gt 0 ]]; do case $1 in
   --release-type) RELEASE_TYPE="$2"; shift;;
   --release-token) RELEASE_TOKEN="$2"; shift;;
   --commit-message) COMMIT_MESSAGE="$2"; shift;;
+  --branch) BRANCH="$2"; shift;;
   *) echo "Unknown parameter passed: $1"; exit 1;;
 esac; shift; done
 
-main "$REPOSITORY" "$GIT_USER" "$GIT_TOKEN" "$RELEASE_TYPE" "$RELEASE_TOKEN" "$COMMIT_MESSAGE"
+main "$REPOSITORY" "$GIT_USER" "$GIT_TOKEN" "$RELEASE_TYPE" "$RELEASE_TOKEN" "$COMMIT_MESSAGE" "$BRANCH"

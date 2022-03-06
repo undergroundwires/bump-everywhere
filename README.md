@@ -16,15 +16,18 @@
 
 ## Features
 
-Allows you to automatically:
+🤖 Allows you to automatically:
 
-- Bump your sematic git tag by increasing the patch version
-- Create & commit a changelog file
-- If `npm` project then bump `package.json` version and commit
+- Bump your semantic git tag by increasing the patch version.
+- Create & commit a changelog file.
+- If `npm` project then bump `package.json` version and commit.
 - Check `README.md` file, if it has references to older version, update with never version.
-- Create a release on GitHub with auto-generated release notes
+- Create a release on GitHub with auto-generated release notes.
 
-It supports safe re-runs, it means that if you can run it for an already bumped or tagged repository, it'll not increase the version as everything is still up-to-date. It protects against recursive runs.
+✅ Other features include:
+
+- Zero-configuration for most use-cases, but can still be customized.
+- It supports safe re-runs, it means that if you can run it for an already bumped or tagged repository, it'll not increase the version as everything is still up-to-date. It protects against recursive runs.
 
 ## Usage
 
@@ -60,6 +63,12 @@ It supports safe re-runs, it means that if you can run it for an already bumped 
     # If you use default, it'll not trigger other actions, but your own PAT then it triggers new actions
     # (Optional) Default: ${{ github.token }}
     release-token: ''
+
+    # Git branch to push the changes such as version tags, CHANGELOG file, version changes...
+    # Configuring this should not be needed for most use-cases.
+    # Use this only if you DO NOT use a single main default branch (e.g. `master` or `main`).
+    # (Optional) Default: Default "git clone" behavior. Checks out to default branch of remote.
+    branch: ''
 ```
 
 [↑](#bump-everywhere)
@@ -72,13 +81,18 @@ It supports safe re-runs, it means that if you can run it for an already bumped 
 - Run with arguments:
 
   ```sh
-    docker run undergroundwires/bump-everywhere \
-      --repository "undergroundwires/privacy.sexy" \
-      --user "bot-user" \
-      --git-token "GitHub PAT for pushes" \
-      --release-type "prerelease" \
-      --release-token "GitHub PAT for releases" \
+    args=(
+      # Required:
+      --repository "undergroundwires/privacy.sexy"
+      --user "bot-user"
+      --git-token "GitHub PAT for pushes"
+      --release-type "prerelease"
+      --release-token "GitHub PAT for releases"
       --commit-message "⬆️ bump to {{version}}"
+      # Optional:
+      --branch 'custom branch name'
+    )
+    docker run undergroundwires/bump-everywhere "${args[@]}"
   ```
 
 [↑](#bump-everywhere)
@@ -106,11 +120,15 @@ It supports safe re-runs, it means that if you can run it for an already bumped 
 
 ## Updating minor & major versions
 
-- You manually tag your last commit to update major & minor versions.
-- E.g.
-  - `git commit -m "bumped version to 1.3.1" --allow-empty`
-  - `git tag 1.3.1`
-  - `git push && git push origin 1.3.1`
+bump-everywhere only increases your patch versions. You manually tag your last commit to update major & minor versions.
+
+E.g. :
+
+```sh
+  git commit -m "bumped version to 1.3.1" --allow-empty
+  git tag 1.3.1
+  git push && git push origin 1.3.1
+```
 
 [↑](#bump-everywhere)
 
@@ -140,7 +158,7 @@ You can also use following scripts individually (check script files for usage, p
 
 ## Support
 
-**Sponsor 💕**. Consider one time or recurring donation on [GitHub Sponsors](https://github.com/sponsors/undergroundwires) or [any other way (undrgroundwires.dev/donate)](https://undergroundwires.dev/donate), every penny you leave will help development and maintainance of the project .
+**Sponsor 💕**. Consider one time or recurring donation on [GitHub Sponsors](https://github.com/sponsors/undergroundwires) or [any other way (undrgroundwires.dev/donate)](https://undergroundwires.dev/donate), every penny you leave will help development and maintenance of the project .
 
 **Star 🤩**. If you do cannot do that you can just give it a star ⭐ . It helps me to see that the project is appreciated.
 
