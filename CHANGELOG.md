@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.4.0 (2022-03-06)
+
+* Add prefix with `::` for sourced utilities | [4a6e343](https://github.com/undergroundwires/bump-everywhere/commit/4a6e343a263059ac912e3509ffb12cdfcba44b38)
+* Add contribution information | [817c9e7](https://github.com/undergroundwires/bump-everywhere/commit/817c9e769601ad88e8a4a472e09a5f48b5d6e0de)
+* Unify editor rules | [728ba2d](https://github.com/undergroundwires/bump-everywhere/commit/728ba2d1113e33b7b28f547ecf6b5a12a70a4ab8)
+* Use relative paths for shellcheck source directive | [d73f1b5](https://github.com/undergroundwires/bump-everywhere/commit/d73f1b547a23ffc5625c2eae4a0498a9d10b0733)
+* Refactor code duplication | [6c2963d](https://github.com/undergroundwires/bump-everywhere/commit/6c2963d9e7d191d8c81362dfd3ec3457b0f3be98)
+* Use default branch instead of master #14 | [2579bbf](https://github.com/undergroundwires/bump-everywhere/commit/2579bbf1d52b964e0228f19cabfad8e8c1003f3c)
+* Add --branch option to specify default branch #14 | [5d9c038](https://github.com/undergroundwires/bump-everywhere/commit/5d9c038bc3ecc5648eadbf49ca6c66c6f67b0cf6)
+
+[compare](https://github.com/undergroundwires/bump-everywhere/compare/1.3.1...1.4.0)
+
 ## 1.3.1 (2021-12-21)
 
 * bump dependencies to latest | [51e11bf](https://github.com/undergroundwires/bump-everywhere/commit/51e11bf7dd8ff7428acf122206be034475d7ba77)

@@ -125,9 +125,9 @@ bump-everywhere only increases your patch versions. You manually tag your last c
 E.g. :
 
 ```sh
-  git commit -m "bumped version to 1.3.1" --allow-empty
-  git tag 1.3.1
-  git push && git push origin 1.3.1
+  git commit -m "bumped version to 1.4.0" --allow-empty
+  git tag 1.4.0
+  git push && git push origin 1.4.0
 ```
 
 [↑](#bump-everywhere)
