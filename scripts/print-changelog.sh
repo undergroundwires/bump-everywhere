@@ -14,12 +14,13 @@
 #   - Local: ./log-commits.sh, ./shared/utilities.sh
 
 # Globals
-readonly SCRIPTS_DIRECTORY=$(dirname "$0")
-readonly LOG_COMMITS_SCRIPT_PATH="$SCRIPTS_DIRECTORY/shared/log-commits.sh"
+SELF_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+readonly SELF_DIRECTORY
+readonly LOG_COMMITS_SCRIPT_PATH="$SELF_DIRECTORY/shared/log-commits.sh"
 
 # Import dependencies
 # shellcheck source=shared/utilities.sh
-source "$SCRIPTS_DIRECTORY/shared/utilities.sh"
+source "$SELF_DIRECTORY/shared/utilities.sh"
 
 print_title() {
   local -r tag="$1"

@@ -19,12 +19,13 @@
 # ./print-changelog.sh, ./bump-npm-version, ./create-github-release.sh, ./shared/utilities.sh
 
 # Globals
-readonly SCRIPTS_DIRECTORY=$(dirname "$0")
+SELF_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+readonly SELF_DIRECTORY
 readonly VERSION_PLACEHOLDER="{{version}}"
 
 # Import dependencies
 # shellcheck source=shared/utilities.sh
-source "$SCRIPTS_DIRECTORY/shared/utilities.sh"
+source "$SELF_DIRECTORY/shared/utilities.sh"
 
 print_name() {
   echo "-------------------------------------------------------"
@@ -88,7 +89,7 @@ is_rerun() {
 configure_credentials() {
   local -r repository="$1" git_token="$2" git_user="$3"
   echo "Setting up credentials"
-  bash "$SCRIPTS_DIRECTORY/configure-github-repo.sh" \
+  bash "$SELF_DIRECTORY/configure-github-repo.sh" \
           --user "$git_user" \
           --repository "$repository" \
           --token "$git_token" \
@@ -97,20 +98,20 @@ configure_credentials() {
 
 bump_and_tag() {
   echo "Bumping and tagging version"
-  bash "$SCRIPTS_DIRECTORY/bump-and-tag-version.sh" \
+  bash "$SELF_DIRECTORY/bump-and-tag-version.sh" \
     || { echo "Could not bump & tag"; exit 1; }
 }
 
 update_readme() {
   echo "Updating README.md"
-  bash "$SCRIPTS_DIRECTORY/bump-readme-versions.sh" \
+  bash "$SELF_DIRECTORY/bump-readme-versions.sh" \
     || { echo "Could not bump README.md"; exit 1; }
 }
 
 create_changelog() {
   local -r repository="$1"
   local logs
-  if ! logs=$(bash "$SCRIPTS_DIRECTORY/print-changelog.sh" --repository "$repository") \
+  if ! logs=$(bash "$SELF_DIRECTORY/print-changelog.sh" --repository "$repository") \
     || utilities::is_empty_or_null "$logs"; then
     printf "print-changelog.sh has failed\n%s" "$logs"
     exit 1;
@@ -125,7 +126,7 @@ create_changelog() {
 
 update_npm() {
   echo "Updating npm version"
-  bash "$SCRIPTS_DIRECTORY/bump-npm-version.sh" \
+  bash "$SELF_DIRECTORY/bump-npm-version.sh" \
     || { echo "Could not bump npm version"; exit 1; }
   git add . \
     || { echo "git add failed"; exit 1; }
@@ -156,7 +157,7 @@ commit_and_push() {
 
 create_release() {
   local -r repository="$1" release_token="$2" release_type="$3"
-  bash "$SCRIPTS_DIRECTORY/create-github-release.sh" \
+  bash "$SELF_DIRECTORY/create-github-release.sh" \
       --repository "$repository" \
       --token "$release_token" \
       --type "$release_type" \

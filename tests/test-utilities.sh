@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 # Globals
-readonly ABSOLUTE_SELF_DIRECTORY=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SELF_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+readonly SELF_DIRECTORY
 
 test_utilities::assert_equals() {
   local -r expected="$1"
@@ -89,7 +90,7 @@ __run_test(){
 __get_absolute_sut_path()
 {
   local -r path_from_scripts="$1"
-  local -r script_dir="$ABSOLUTE_SELF_DIRECTORY/../scripts"
+  local -r script_dir="$SELF_DIRECTORY/../scripts"
   local normalized
   if ! normalized=$(cd "${script_dir}" || return 1;pwd; return 0); then
     echo "Dir does not exist: ${script_dir}"

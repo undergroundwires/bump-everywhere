@@ -10,6 +10,10 @@
 #       E.g. --parameter value --parameter2 value
 # See ./tests/docker-entrypoint for testing it locally
 
+# Globals
+SELF_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+readonly SELF_DIRECTORY
+
 main() {
     parameters=()
     for part in "$@"
@@ -23,8 +27,7 @@ main() {
         fi
     done
     echo "[docker-entrypoint.sh] Parameters:" "${parameters[@]}"
-    local -r current_directory=$(dirname "$0")
-    bash "$current_directory"/scripts/bump-everywhere.sh "${parameters[@]}"
+    bash "$SELF_DIRECTORY"/scripts/bump-everywhere.sh "${parameters[@]}"
 }
 
 is_parameter_name_and_value_in_same_arg() {

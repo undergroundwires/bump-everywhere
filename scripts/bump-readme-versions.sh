@@ -11,11 +11,12 @@
 #   - Local: ./shared/utilities.sh
 
 # Globals
-readonly SCRIPTS_DIRECTORY=$(dirname "$0")
+SELF_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+readonly SELF_DIRECTORY
 
 # Import dependencies
 # shellcheck source=shared/utilities.sh
-source "$SCRIPTS_DIRECTORY/shared/utilities.sh"
+source "$SELF_DIRECTORY/shared/utilities.sh"
 
 search_and_replace() {
   local -r file_name="$1" version_before="$2" new_version="$3"

@@ -13,11 +13,12 @@
 #   - External: git
 
 # Globals
-readonly SCRIPT_DIRECTORY=$(dirname "$0")
+SELF_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+readonly SELF_DIRECTORY
 
 # Import dependencies
 # shellcheck source=utilities.sh
-source "$SCRIPT_DIRECTORY/utilities.sh"
+source "$SELF_DIRECTORY/utilities.sh"
 
 # Parse parameters
 while [[ "$#" -gt 0 ]]; do case $1 in

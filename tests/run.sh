@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
+# Globals
+SELF_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+readonly SELF_DIRECTORY
+
 # Import dependencies
-readonly SELF_DIRECTORY=$(dirname "$0")
 # shellcheck source=test-utilities.sh
 source "$SELF_DIRECTORY/test-utilities.sh"
 
